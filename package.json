@@ -1,6 +1,6 @@
 {
   "name": "egoose",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Helper classes and functions for Node.js 8 or later.",
   "main": "lib/index.js",
   "directories": {
@@ -26,9 +26,8 @@
   },
   "homepage": "https://github.com/egodigital/egoose#readme",
   "dependencies": {
+    "@types/lodash": "^4.14.112",
     "lodash": "^4.17.10"
   },
-  "devDependencies": {
-    "@types/lodash": "^4.14.112"
-  }
+  "devDependencies": {}
 }
