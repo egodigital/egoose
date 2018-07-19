@@ -1,0 +1,34 @@
+{
+  "name": "egoose",
+  "version": "1.0.0",
+  "description": "Helper classes and functions for Node.js 8 or later.",
+  "main": "lib/index.js",
+  "directories": {
+    "lib": "lib"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/egodigital/egoose.git"
+  },
+  "keywords": [
+    "node",
+    "ego",
+    "classes",
+    "functions"
+  ],
+  "author": "e.GO digital GmbH, Germany",
+  "license": "LGPL-3.0",
+  "bugs": {
+    "url": "https://github.com/egodigital/egoose/issues"
+  },
+  "homepage": "https://github.com/egodigital/egoose#readme",
+  "dependencies": {
+    "lodash": "^4.17.10"
+  },
+  "devDependencies": {
+    "@types/lodash": "^4.14.112"
+  }
+}
