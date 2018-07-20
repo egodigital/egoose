@@ -7,5 +7,5 @@ Helper classes and functions for [Node.js 8+](https://nodejs.org/) written in [T
 Execute the following command from your project folder, where your `package.json` file is stored:
 
 ```bash
-npm install --save https://github.com/egodigital/egoose
+npm install --save @egodigital/egoose
 ```
