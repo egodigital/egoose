@@ -17,6 +17,10 @@
 
 import * as _ from 'lodash';
 
+export * from './events';
+export * from './http';
+export * from './streams';
+
 /**
  * Returns an input value as array.
  *
