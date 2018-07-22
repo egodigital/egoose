@@ -57,13 +57,13 @@ export interface HttpRequestOptions {
  */
 export interface HttpRequestOptionsWithBody extends HttpRequestOptions {
     /**
-     * The custom string encoding for the input body to use.
-     */
-    encoding?: string;
-    /**
      * The body to send.
      */
     body?: HttpRequestBody;
+    /**
+     * The custom string encoding for the input body to use.
+     */
+    encoding?: string;
 }
 
 /**
