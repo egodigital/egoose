@@ -90,7 +90,7 @@ export interface HttpResponse {
      *
      * @return this
      */
-    pipe(target: Writable): this;
+    pipe(target: Writable): Writable;
     /**
      * Reads the response body.
      *
@@ -266,9 +266,7 @@ export function request(method: string, u: HttpRequestUrl, opts?: HttpRequestOpt
                     code: response.statusCode,
                     headers: response.headers || {},
                     pipe: function (target) {
-                        response.pipe(target);
-
-                        return this;
+                        return response.pipe(target);
                     },
                     readBody: async () => {
                         if (false === respBody) {
