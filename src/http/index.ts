@@ -1,6 +1,6 @@
 /**
  * This file is part of the @egodigital/egoose distribution.
- * Copyright (c) Marcel Joachim Kloubert.
+ * Copyright (c) e.GO Digital GmbH, Aachen, Germany (https://www.e-go-digital.com/)
  *
  * @egodigital/egoose is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as
@@ -17,18 +17,39 @@
 
 import * as _ from 'lodash';
 import { readAll } from '../streams';
+const NormalizeHeaderCase = require("header-case-normalizer");
 import * as HTTP from 'http';
 import * as HTTPs from 'https';
 import { normalizeString, toStringSafe } from '../index';
 import * as IsStream from 'is-stream';
-const MergeDeep = require('merge-deep');
-const NormalizeHeaderCase = require("header-case-normalizer");
+import { Readable, Writable } from 'stream';
 import * as url from 'url';
+
+/**
+ * Possible input values for a request body.
+ */
+export type HttpRequestBody = string | Buffer | HttpRequestBodyProvider | Readable;
+
+/**
+ * Possible values for a request body.
+ */
+export type HttpRequestBodyValue = string | Buffer | Readable;
+
+/**
+ * A function, which provides a request body value.
+ *
+ * @return {HttpRequestBodyValue|Promise<HttpRequestBodyValue>} The result with the body to send.
+ */
+export type HttpRequestBodyProvider = () => HttpRequestBodyValue | Promise<HttpRequestBodyValue>;
 
 /**
  * Options for a HTTP request.
  */
 export interface HttpRequestOptions {
+    /**
+     * The custom string encoding for the input body to use.
+     */
+    encoding?: string;
     /**
      * The custom headers to send.
      */
@@ -42,7 +63,7 @@ export interface HttpRequestOptionsWithBody extends HttpRequestOptions {
     /**
      * The body to send.
      */
-    body?: any;
+    body?: HttpRequestBody;
 }
 
 /**
@@ -63,7 +84,17 @@ export interface HttpResponse {
      */
     headers: any;
     /**
+     * Pipes the response body to a target.
+     *
+     * @param {Writable} target The target stream.
+     *
+     * @return this
+     */
+    pipe(target: Writable): this;
+    /**
      * Reads the response body.
+     *
+     * @return {Promise<Buffer>} The promise with the data.
      */
     readBody(): Promise<Buffer>;
     /**
@@ -207,6 +238,11 @@ export function request(method: string, u: HttpRequestUrl, opts?: HttpRequestOpt
         opts = <any>{};
     }
 
+    let enc = normalizeString(opts.encoding);
+    if ('' === enc) {
+        enc = 'utf8';
+    }
+
     return new Promise<HttpResponse>(async (resolve, reject) => {
         try {
             const REQUEST_URL = <url.Url>u;
@@ -229,6 +265,11 @@ export function request(method: string, u: HttpRequestUrl, opts?: HttpRequestOpt
                 const RESPONSE: HttpResponse = {
                     code: response.statusCode,
                     headers: response.headers || {},
+                    pipe: function (target) {
+                        response.pipe(target);
+
+                        return this;
+                    },
                     readBody: async () => {
                         if (false === respBody) {
                             respBody = await readAll(response);
@@ -273,8 +314,7 @@ export function request(method: string, u: HttpRequestUrl, opts?: HttpRequestOpt
                             HTTP_OPTS.port = 80;
                         }
 
-                        return HTTP.request(MergeDeep(HTTP_OPTS, opts),
-                                            CALLBACK);
+                        return HTTP.request(HTTP_OPTS, CALLBACK);
                     };
                     break;
 
@@ -288,8 +328,7 @@ export function request(method: string, u: HttpRequestUrl, opts?: HttpRequestOpt
                             HTTPs_OPTS.port = 443;
                         }
 
-                        return HTTPs.request(MergeDeep(HTTPs_OPTS, opts),
-                                             CALLBACK);
+                        return HTTPs.request(HTTPs_OPTS, CALLBACK);
                     };
                     break;
             }
@@ -313,7 +352,7 @@ export function request(method: string, u: HttpRequestUrl, opts?: HttpRequestOpt
                 } else if (Buffer.isBuffer(body)) {
                     request.write(body);
                 } else {
-                    request.write(new Buffer(toStringSafe(body), 'utf8'));
+                    request.write(new Buffer(toStringSafe(body), enc));
                 }
             }
 
