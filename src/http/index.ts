@@ -47,10 +47,6 @@ export type HttpRequestBodyProvider = () => HttpRequestBodyValue | Promise<HttpR
  */
 export interface HttpRequestOptions {
     /**
-     * The custom string encoding for the input body to use.
-     */
-    encoding?: string;
-    /**
      * The custom headers to send.
      */
     headers?: any;
@@ -60,6 +56,10 @@ export interface HttpRequestOptions {
  * Options for a HTTP request with a body.
  */
 export interface HttpRequestOptionsWithBody extends HttpRequestOptions {
+    /**
+     * The custom string encoding for the input body to use.
+     */
+    encoding?: string;
     /**
      * The body to send.
      */
