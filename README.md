@@ -31,7 +31,7 @@ from same folder.
 
 ## Tests
 
-Simply run the following command:
+Run the following command
 
 ```bash
 npm test
