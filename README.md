@@ -29,8 +29,7 @@ from module's folder.
 Now, run [TypeScript compiler](https://www.npmjs.com/package/typescript) by executing
 
 ```bash
-rm -rf ./lib
-tsc && tsc -d
+npm run build
 ```
 
 from same folder.
@@ -40,7 +39,7 @@ from same folder.
 Execute
 
 ```bash
-./node_modules/.bin/typedoc --out ./doc ./src/**
+npm run doc
 ```
 
 from module's root.
