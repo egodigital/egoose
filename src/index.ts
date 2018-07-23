@@ -196,6 +196,7 @@ export function utc(): moment.Moment {
 }
 
 export * from './apis/host';
+export * from './apis/index';
 export * from './dev';
 export * from './diagnostics/logger';
 export * from './events';
