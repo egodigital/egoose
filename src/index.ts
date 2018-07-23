@@ -16,7 +16,11 @@
  */
 
 import * as _ from 'lodash';
+import * as moment from 'moment';
+// @ts-ignore
+import * as momentTZ from 'moment-timezone';  // REQUIRED EXTENSION FOR moment MODULE!!!
 
+export * from './diagnostics/logger';
 export * from './events';
 export * from './http';
 export * from './streams';
@@ -107,6 +111,21 @@ export function normalizeString(val: any): string {
 }
 
 /**
+ * Returns the current time.
+ *
+ * @param {string} [timezone] The custom timezone to use.
+ *
+ * @return {Moment.Moment} The current time.
+ */
+export function now(timezone?: string): moment.Moment {
+    timezone = toStringSafe(timezone).trim();
+
+    const NOW = moment();
+    return '' === timezone ? NOW
+                           : NOW.tz(timezone);
+}
+
+/**
  * Converts a value to a string (if needed), which is not (null) and not (undefined).
  *
  * @param {any} val The value to convert.
@@ -132,4 +151,13 @@ export function toStringSafe(val: any, defaultValue = ''): string {
     }
 
     return '' + val;
+}
+
+/**
+ * Returns the current time in UTC.
+ *
+ * @return {moment.Moment} The current UTC time.
+ */
+export function utc(): moment.Moment {
+    return moment.utc();
 }

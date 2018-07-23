@@ -1,5 +1,10 @@
 # Change Log (@egodigital/egoose)
 
+## 1.6.0
+
+* added `now()` and `utc()` functions
+* added logger types and functions
+
 ## 1.5.0
 
 * added unit tests
