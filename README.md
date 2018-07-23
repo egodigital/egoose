@@ -10,7 +10,13 @@ Execute the following command from your project folder, where your `package.json
 npm install --save @egodigital/egoose
 ```
 
+## Documentation
+
+API documentation can be found [here](https://egodigital.github.io/egoose/).
+
 ## Build
+
+### Module
 
 First install all required `node_modules` by executing
 
@@ -28,6 +34,16 @@ tsc && tsc -d
 ```
 
 from same folder.
+
+### Documentation
+
+Execute
+
+```bash
+./node_modules/.bin/typedoc --out ./doc ./src/**
+```
+
+from module's root.
 
 ## Tests
 
