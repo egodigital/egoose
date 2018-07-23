@@ -15,13 +15,11 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-import { normalizeString } from './index';
-
 /**
  * Stores if 'APP_ENV' environment variable is set to 'dev' or not.
  */
-export const IS_DEV = 'dev' === normalizeString(process.env.APP_ENV);
+export const IS_DEV = 'dev' === ('' + process.env.APP_ENV).toLowerCase().trim();
 /**
  * Stores if 'LOCAL_DEVELOPMENT' environment variable is set to 'true' or not.
  */
-export const IS_LOCAL_DEV = 'true' === normalizeString(process.env.LOCAL_DEVELOPMENT);
+export const IS_LOCAL_DEV = 'true' === ('' + process.env.LOCAL_DEVELOPMENT).toLowerCase().trim();
