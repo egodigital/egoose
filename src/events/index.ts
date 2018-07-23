@@ -1,6 +1,6 @@
 /**
  * This file is part of the @egodigital/egoose distribution.
- * Copyright (c) Marcel Joachim Kloubert.
+ * Copyright (c) e.GO Digital GmbH, Aachen, Germany (http://www.e-go-digital.com/)
  *
  * @egodigital/egoose is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as
