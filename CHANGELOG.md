@@ -2,8 +2,10 @@
 
 ## 1.6.0
 
-* added `now()` and `utc()` functions
+* added `createCompletedAction()`, `now()` and `utc()` functions
 * added logger types and functions
+* added API host types
+* added `IS_DEV` and `IS_LOCAL_DEV` constants
 
 ## 1.5.0
 

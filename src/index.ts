@@ -20,10 +20,20 @@ import * as moment from 'moment';
 // @ts-ignore
 import * as momentTZ from 'moment-timezone';  // REQUIRED EXTENSION FOR moment MODULE!!!
 
+export * from './apis/host';
+export * from './dev';
 export * from './diagnostics/logger';
 export * from './events';
 export * from './http';
 export * from './streams';
+
+/**
+ * Describes a simple 'completed' action.
+ *
+ * @param {any} err The occurred error.
+ * @param {TResult} [result] The result.
+ */
+export type CompletedAction<TResult> = (err: any, result?: TResult) => void;
 
 /**
  * Returns an input value as array.
@@ -84,6 +94,36 @@ export function compareValuesBy<T = any, U = T>(x: T, y: T, selector: (val: T) =
     }
 
     return 0;
+}
+
+/**
+ * Creates a simple 'completed' callback for a promise.
+ *
+ * @param {Function} resolve The 'succeeded' callback.
+ * @param {Function} reject The 'error' callback.
+ *
+ * @return {CompletedAction<TResult>} The created action.
+ */
+export function createCompletedAction<TResult = any>(resolve: (value?: TResult | PromiseLike<TResult>) => void,
+                                                     reject?: (reason: any) => void): CompletedAction<TResult> {
+    let completedInvoked = false;
+
+    return (err, result?) => {
+        if (completedInvoked) {
+            return;
+        }
+        completedInvoked = true;
+
+        if (err) {
+            if (reject) {
+                reject(err);
+            }
+        } else {
+            if (resolve) {
+                resolve(result);
+            }
+        }
+    };
 }
 
 /**
