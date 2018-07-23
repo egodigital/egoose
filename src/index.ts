@@ -20,13 +20,6 @@ import * as moment from 'moment';
 // @ts-ignore
 import * as momentTZ from 'moment-timezone';  // REQUIRED EXTENSION FOR moment MODULE!!!
 
-export * from './apis/host';
-export * from './dev';
-export * from './diagnostics/logger';
-export * from './events';
-export * from './http';
-export * from './streams';
-
 /**
  * Describes a simple 'completed' action.
  *
@@ -201,3 +194,11 @@ export function toStringSafe(val: any, defaultValue = ''): string {
 export function utc(): moment.Moment {
     return moment.utc();
 }
+
+export * from './apis/host';
+export * from './dev';
+export * from './diagnostics/logger';
+export * from './events';
+export * from './http';
+export * from './mongo';
+export * from './streams';

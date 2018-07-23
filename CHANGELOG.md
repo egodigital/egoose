@@ -1,5 +1,9 @@
 # Change Log (@egodigital/egoose)
 
+## 1.8.0
+
+* Mongo database
+
 ## 1.6.0
 
 * added `createCompletedAction()`, `now()` and `utc()` functions
