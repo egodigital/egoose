@@ -79,13 +79,6 @@ export class ApiHost {
     private _useBodyParser: UseBodyParserSetting = true;
 
     /**
-     * Initializes a new instance of that class.
-     */
-    public constructor() {
-        this._app = express();
-    }
-
-    /**
      * Gets the underlying Express app instance.
      */
     public get app(): express.Express {
@@ -243,6 +236,13 @@ export class ApiHost {
         return this._root;
     }
 
+    /**
+     * Sets a 'Basic Auth' based authorizer.
+     *
+     * @param {BasicAuthAuthorizer} authorizer The authorizer.
+     *
+     * @return this
+     */
     public setBasicAuth(authorizer: BasicAuthAuthorizer): this {
         return this.setPrefixedAuthorizer(async (token) => {
             try {
