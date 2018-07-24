@@ -132,14 +132,14 @@ export class ApiHost {
                 ubpOpts = MergeDeep(ubpOpts, this._useBodyParser);
             }
 
-            NEW_APP.use(
+            NEW_API_ROOT.use(
                 bodyParser(ubpOpts)
             );
         }
 
         const POWERED_BY = toStringSafe(this._poweredBy).trim();
         if ('' !== POWERED_BY) {
-            NEW_APP.use((req, res, next) => {
+            NEW_API_ROOT.use((req, res, next) => {
                 res.header('X-Powered-By', POWERED_BY);
 
                 next();
@@ -148,7 +148,7 @@ export class ApiHost {
 
         const AUTHORIZER = this._authorizer;
         if (!_.isNil(AUTHORIZER)) {
-            NEW_APP.use(async (req, res, next) => {
+            NEW_API_ROOT.use(async (req, res, next) => {
                 const IS_VALID = await Promise.resolve(
                     AUTHORIZER(req)
                 );
@@ -165,7 +165,7 @@ export class ApiHost {
 
         if (IS_LOCAL_DEV) {
             // trace request
-            NEW_APP.use((req, res, next) => {
+            NEW_API_ROOT.use((req, res, next) => {
                 try {
                     NEW_LOGGER.trace({
                         request: {
@@ -180,7 +180,7 @@ export class ApiHost {
             });
 
             // only for test use
-            NEW_APP.use((req, res, next) => {
+            NEW_API_ROOT.use((req, res, next) => {
                 res.header("Access-Control-Allow-Origin", "*");
                 res.header("Access-Control-Allow-Headers", "*");
                 res.header("Access-Control-Allow-Methods", "*");
