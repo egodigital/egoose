@@ -17,6 +17,7 @@
 
 import * as _ from 'lodash';
 import * as bodyParser from 'body-parser';
+import { MongoDatabase, MongoDatabaseOptions } from '../mongo/index';
 import { Logger } from '../diagnostics/logger';
 import * as express from 'express';
 import * as http from 'http';
@@ -408,5 +409,53 @@ export class ApiHost {
         }
 
         return this._useBodyParser;
+    }
+}
+
+/**
+ * An API with MongoDB helper methods.
+ */
+export class MongoApiHost extends ApiHost {
+    /**
+     * Options a new connection to a database.
+     *
+     * @param {helpers.MongoDatabaseOptions} [opts] The custom options to use.
+     *
+     * @return {Database} The new, opened, database.
+     */
+    public async openDatabase(opts?: MongoDatabaseOptions) {
+        let db: MongoDatabase;
+        if (_.isNil(opts)) {
+            db = MongoDatabase.fromEnvironment();
+        } else {
+            db = new MongoDatabase(opts);
+        }
+
+        await db.connect();
+
+        return db;
+    }
+
+    /**
+     * Opens a data connection and invokes an action for it.
+     * After invokation, the database is closed automatically.
+     *
+     * @param {Function} action The action to invoke.
+     * @param {MongoDatabaseOptions} [opts] Custom database options.
+     *
+     * @return {Promise<TResult>} The promise with the result of the action.
+     */
+    public async withDatabase<TResult = any>(
+        action: (db: MongoDatabase) => (TResult | PromiseLike<TResult>),
+        opts?: MongoDatabaseOptions,
+    ): Promise<TResult> {
+        const DB = await this.openDatabase(opts);
+        try {
+            return await Promise.resolve(
+                action(DB)
+            );
+        } finally {
+            await DB.disconnect();
+        }
     }
 }

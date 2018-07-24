@@ -1,5 +1,9 @@
 # Change Log (@egodigital/egoose)
 
+## 1.10.0
+
+* added special API host class with MongoDB helper methods
+
 ## 1.9.0
 
 * added `cloneObj()`, `importApiErrors()` and `importApiErrorsSync()` functions
