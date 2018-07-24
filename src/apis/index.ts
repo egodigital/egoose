@@ -15,8 +15,11 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-import { asArray } from '../index';
+import { asArray, cloneObj, normalizeString } from '../index';
+import * as _ from 'lodash';
 import { Response } from 'express';
+import { readFile, readFileSync } from 'fs-extra';
+import * as Path from 'path';
 
 /**
  * An entry for an API error.
@@ -30,6 +33,22 @@ export interface ApiError {
      * English (en)
      */
     en: string;
+}
+
+/**
+ * A possible value for 'importApiErrors()' and 'importApiErrorsSync()' functions.
+ *
+ * If STRING: The path to the JSON file to import.
+ * If BUFFER: The binary content as UTF-8 JSON data.
+ * If OBJECT or ARRAY: One or more items to import.
+ */
+export type ImportApiErrorsArgument = string | Buffer | ApiErrorWithKey | ApiErrorWithKey[];
+
+/**
+ * An entry for an API error with a key.
+ */
+export interface ApiErrorWithKey extends ApiError {
+    key: string;
 }
 
 interface ApiResponse {
@@ -60,6 +79,75 @@ export interface ApiResult {
  * Global list of API errors.
  */
 export const API_ERRORS: { [name: string]: ApiError } = {};
+
+function applyApiErrors(errors: ApiErrorWithKey[]) {
+    errors = asArray(errors);
+
+    for (const ERR of errors) {
+        const KEY = normalizeString(ERR.key);
+
+        const CLONED_ERR = cloneObj(ERR);
+        delete CLONED_ERR['key'];
+
+        API_ERRORS[KEY] = cloneObj(CLONED_ERR);
+    }
+}
+
+/**
+ * Imports the data for 'API_ERRORS' constant.
+ *
+ * @param {ImportApiErrorsArgument} errors The items to import.
+ */
+export async function importApiErrors(errors: ImportApiErrorsArgument) {
+    let importedErrorList: ApiErrorWithKey[];
+    if (_.isString(errors)) {
+        if (!Path.isAbsolute(errors)) {
+            errors = Path.join(
+                process.cwd(), errors
+            );
+        }
+
+        importedErrorList = JSON.parse(
+            (await readFile(errors)).toString('utf8')
+        );
+    } else if (Buffer.isBuffer(errors)) {
+        importedErrorList = JSON.parse(
+            errors.toString('utf8')
+        );
+    } else {
+        importedErrorList = <any>errors;
+    }
+
+    applyApiErrors(importedErrorList);
+}
+
+/**
+ * Imports the data for 'API_ERRORS' constant (sync).
+ *
+ * @param {ImportApiErrorsArgument} errors The items to import.
+ */
+export function importApiErrorsSync(errors: ImportApiErrorsArgument) {
+    let importedErrorList: ApiErrorWithKey[];
+    if (_.isString(errors)) {
+        if (!Path.isAbsolute(errors)) {
+            errors = Path.join(
+                process.cwd(), errors
+            );
+        }
+
+        importedErrorList = JSON.parse(
+            readFileSync(errors).toString('utf8')
+        );
+    } else if (Buffer.isBuffer(errors)) {
+        importedErrorList = JSON.parse(
+            errors.toString('utf8')
+        );
+    } else {
+        importedErrorList = <any>errors;
+    }
+
+    applyApiErrors(importedErrorList);
+}
 
 /**
  * Sends an API response.

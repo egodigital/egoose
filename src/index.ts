@@ -51,6 +51,23 @@ export function asArray<T>(val: T | T[], noEmpty = true): T[] {
 }
 
 /**
+ * Clones an object / value.
+ *
+ * @param {T} obj The value to clone.
+ *
+ * @return {T} The cloned value.
+ */
+export function cloneObj<T>(obj: T): T {
+    if (!obj) {
+        return obj;
+    }
+
+    return JSON.parse(
+        JSON.stringify(obj)
+    );
+}
+
+/**
  * Compare to values for sorting.
  *
  * @param {any} x The "left" value.

@@ -1,5 +1,9 @@
 # Change Log (@egodigital/egoose)
 
+## 1.9.0
+
+* added `cloneObj()`, `importApiErrors()` and `importApiErrorsSync()` functions
+
 ## 1.8.0
 
 * Mongo database

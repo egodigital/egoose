@@ -1,6 +1,6 @@
 {
   "name": "@egodigital/egoose",
-  "version": "1.8.1",
+  "version": "1.9.0",
   "description": "Helper classes and functions for Node.js 8 or later.",
   "main": "lib/index.js",
   "private": false,
@@ -8,6 +8,8 @@
     "lib": "lib"
   },
   "scripts": {
+    "build": "(rm -r ./lib || true) && (\"./node_modules/.bin/tsc\" && \"./node_modules/.bin/tsc\" -d)",
+    "doc": "(rm -r ./doc || true) && (\"./node_modules/.bin/typedoc\" --out ./doc ./src)",
     "test": "./node_modules/.bin/mocha ./lib/test/**/*.js"
   },
   "repository": {
@@ -42,6 +44,7 @@
     "@types/body-parser": "^1.17.0",
     "@types/chai": "^4.1.4",
     "@types/express": "^4.16.0",
+    "@types/fs-extra": "^5.0.4",
     "@types/is-stream": "^1.1.0",
     "@types/lodash": "^4.14.112",
     "@types/mocha": "^5.2.5",
@@ -52,6 +55,7 @@
     "body-parser": "^1.18.3",
     "chai": "^4.1.2",
     "express": "^4.16.3",
+    "fs-extra": "^7.0.0",
     "header-case-normalizer": "^1.0.3",
     "is-stream": "^1.1.0",
     "lodash": "^4.17.10",
