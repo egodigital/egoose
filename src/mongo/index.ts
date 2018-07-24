@@ -140,9 +140,61 @@ export class MongoDatabase {
     }
 
     /**
+     * Returns a model by name.
+     *
+     * @param {string} name The name of the model.
+     *
+     * @return {mongoose.Model<mongoose.Document>} The model.
+     */
+    public model(name: string): mongoose.Model<mongoose.Document> {
+        return MONGO_MODELS[name];
+    }
+
+    /**
      * Gets the underlying database connection.
      */
     public get mongo(): mongoose.Mongoose {
         return this._mongo;
+    }
+
+    /**
+     * Starts a query for a schema and a list of results.
+     *
+     * @param {string} schema The name of the schema.
+     * @param {string} func The name of the initial function.
+     * @param {any[]} [args] One or more argument for the function, like a condition.
+     *
+     * @return {mongoose.DocumentQuery<mongoose.Document[], mongoose.Document>} The query.
+     */
+    public query(schema: string, func: string, ...args: any[]): mongoose.DocumentQuery<mongoose.Document[], mongoose.Document> {
+        const M = this.model(schema);
+
+        return M[func].apply(M, args);
+    }
+
+    /**
+     * Starts a query for a schema and a single result.
+     *
+     * @param {string} schema The name of the schema.
+     * @param {string} func The name of the initial function.
+     * @param {any[]} [args] One or more argument for the function, like a condition.
+     *
+     * @return {mongoose.DocumentQuery<mongoose.Document, mongoose.Document>} The query.
+     */
+    public queryOne(schema: string, func: string, ...args: any[]): mongoose.DocumentQuery<mongoose.Document, mongoose.Document> {
+        const M = this.model(schema);
+
+        return M[func].apply(M, args);
+    }
+
+    /**
+     * Returns a schema by name.
+     *
+     * @param {string} name The name of the schema.
+     *
+     * @return {mongoose.Schema} The schema.
+     */
+    public schema(name: string): mongoose.Schema {
+        return MONGO_SCHEMAS[name];
     }
 }

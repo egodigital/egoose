@@ -1,5 +1,9 @@
 # Change Log (@egodigital/egoose)
 
+## 1.11.0
+
+* added `model()`, `query()` and `queryOne()` methods for `MongoDatabase` class
+
 ## 1.10.0
 
 * added special API host class with MongoDB helper methods
