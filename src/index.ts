@@ -200,6 +200,10 @@ export function toStringSafe(val: any, defaultValue = ''): string {
         return '' + val.toString();
     }
 
+    if (Array.isArray(val) || _.isObjectLike(val)) {
+        return JSON.stringify(val);
+    }
+
     return '' + val;
 }
 

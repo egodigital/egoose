@@ -1,5 +1,9 @@
 # Change Log (@egodigital/egoose)
 
+## 1.12.0
+
+* `toStringSafe()` can also handle arrays and plain objects now
+
 ## 1.11.0
 
 * added `model()`, `query()` and `queryOne()` methods for `MongoDatabase` class
