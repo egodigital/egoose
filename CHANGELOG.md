@@ -1,6 +1,10 @@
 # Change Log (@egodigital/egoose)
 
-## 1.12.0
+## 1.14.0
+
+* added custom options for an `initialize()` method of an `ApiHost` object
+
+## 1.13.0
 
 * `toStringSafe()` can also handle arrays and plain objects now
 

@@ -53,6 +53,16 @@ export type BodyParserOptions = bodyParser.OptionsJson & bodyParser.OptionsText 
 type HTTPServer = http.Server | https.Server;
 
 /**
+ * Options for an 'initialize' method of an 'ApiHost' object.
+ */
+export interface InitializeApiHostOptions {
+    /**
+     * Is invoked after an Express app instance has been created.
+     */
+    onAppCreated?: (app: express.Express) => void;
+}
+
+/**
  * A token based authorizer.
  *
  * @param {string} token The token to check.
@@ -106,8 +116,14 @@ export class ApiHost {
 
     /**
      * (Re-)Initializes the host.
+     *
+     * @param {InitializeApiHostOptions} [opts] Custom options.
      */
-    public initialize() {
+    public initialize(opts?: InitializeApiHostOptions) {
+        if (_.isNil(opts)) {
+            opts = <any>{};
+        }
+
         const OLD_SERVER = this._server;
         if (OLD_SERVER) {
             OLD_SERVER.close();
@@ -116,6 +132,11 @@ export class ApiHost {
         }
 
         const NEW_APP = express();
+        if (opts.onAppCreated) {
+            opts.onAppCreated
+                .apply(this, [ NEW_APP ]);
+        }
+
         const NEW_LOGGER = new Logger();
 
         const NEW_API_ROOT = express.Router();
