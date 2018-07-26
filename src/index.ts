@@ -19,6 +19,7 @@ import * as _ from 'lodash';
 import * as moment from 'moment';
 // @ts-ignore
 import * as momentTZ from 'moment-timezone';  // REQUIRED EXTENSION FOR moment MODULE!!!
+import * as UUID from 'uuid';
 
 /**
  * Describes a simple 'completed' action.
@@ -137,6 +138,13 @@ export function createCompletedAction<TResult = any>(resolve: (value?: TResult |
 }
 
 /**
+ * Alias of 'uuid()' function.
+ */
+export function guid(version?: string): string {
+    return uuid.apply(null, arguments);
+}
+
+/**
  * Checks if the string representation of a value is an empty string or not.
  *
  * @param {any} val The value to check.
@@ -214,6 +222,38 @@ export function toStringSafe(val: any, defaultValue = ''): string {
  */
 export function utc(): moment.Moment {
     return moment.utc();
+}
+
+/**
+ * Generates an unique ID.
+ *
+ * @param {string} [version] The custom version to use. Default: 4
+ * @param {any[]} []
+ *
+ * @return {string} The new GUID / unique ID.
+ */
+export function uuid(version?: string, ...args: any[]): string {
+    version = normalizeString(version);
+
+    switch (version) {
+        case '':
+        case '4':
+        case 'v4':
+            return UUID.v4
+                       .apply(null, args);
+
+        case '1':
+        case 'v1':
+            return UUID.v1
+                       .apply(null, args);
+
+        case '5':
+        case 'v5':
+            return UUID.v5
+                       .apply(null, args);
+    }
+
+    throw new Error(`Version '${ version }' is not supported`);
 }
 
 export * from './apis/host';

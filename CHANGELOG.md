@@ -1,5 +1,9 @@
 # Change Log (@egodigital/egoose)
 
+## 1.15.0
+
+* added `guid()` and `uuid()` functions
+
 ## 1.14.0
 
 * added custom options for an `initialize()` method of an `ApiHost` object
