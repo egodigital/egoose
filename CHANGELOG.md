@@ -3,6 +3,7 @@
 ## 2.3.0
 
 * added `useErrorHandler()` to `ApiHost` class
+* added `applyFuncFor` and `toBooleanSafe()` functions
 
 ## 2.2.0
 
