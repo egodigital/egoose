@@ -1,5 +1,10 @@
 # Change Log (@egodigital/egoose)
 
+## 2.0.0
+
+* improved use of `MongoApiHost` and `MongoDatabase` classes
+* remove static `fromEnvironment()` method from `MongoDatabase`
+
 ## 1.15.0
 
 * added `guid()` and `uuid()` functions

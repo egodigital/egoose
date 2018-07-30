@@ -48,7 +48,7 @@ describe('#toStringSafe()', function() {
         });
 
         it('should return custom default value when the value is (undefined)', function() {
-            const RES: any = toStringSafe(null, 'TM');
+            const RES: any = toStringSafe(undefined, 'TM');
 
             assert.ok('string' === typeof RES);
             assert.equal(RES, 'TM');

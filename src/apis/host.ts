@@ -436,25 +436,48 @@ export class ApiHost {
 /**
  * An API with MongoDB helper methods.
  */
-export class MongoApiHost extends ApiHost {
+export class MongoApiHost<
+    TDatabase extends MongoDatabase = MongoDatabase,
+    TOptions extends MongoDatabaseOptions = MongoDatabaseOptions,
+> extends ApiHost {
+    /**
+     * Returns the database class.
+     *
+     * @return {MongoDatabase} The class.
+     */
+    protected getDatabaseClass(): typeof MongoDatabase {
+        return MongoDatabase;
+    }
+
     /**
      * Options a new connection to a database.
      *
-     * @param {helpers.MongoDatabaseOptions} [opts] The custom options to use.
+     * @param {TOptions} [opts] The custom options to use.
      *
-     * @return {Database} The new, opened, database.
+     * @return {TDatabase} The new, opened, database.
      */
-    public async openDatabase(opts?: MongoDatabaseOptions) {
+    public async openDatabase(opts?: TOptions): Promise<TDatabase> {
+        const DB_CLASS = this.getDatabaseClass();
+
         let db: MongoDatabase;
         if (_.isNil(opts)) {
-            db = MongoDatabase.fromEnvironment();
+            // use environment variables
+
+            db = new DB_CLASS({
+                database: process.env.MONGO_DB,
+                host: process.env.MONGO_HOST,
+                options: process.env.MONGO_OPTIONS,
+                port: parseInt(process.env.MONGO_PORT),
+                password: process.env.MONGO_PASSWORD,
+                user: process.env.MONGO_USER,
+            });
         } else {
-            db = new MongoDatabase(opts);
+            db = new DB_CLASS(opts);
         }
 
         await db.connect();
 
-        return db;
+        return <TDatabase>db;
     }
 
     /**
@@ -462,13 +485,13 @@ export class MongoApiHost extends ApiHost {
      * After invokation, the database is closed automatically.
      *
      * @param {Function} action The action to invoke.
-     * @param {MongoDatabaseOptions} [opts] Custom database options.
+     * @param {TOptions} [opts] Custom database options.
      *
      * @return {Promise<TResult>} The promise with the result of the action.
      */
     public async withDatabase<TResult = any>(
-        action: (db: MongoDatabase) => (TResult | PromiseLike<TResult>),
-        opts?: MongoDatabaseOptions,
+        action: (db: TDatabase) => (TResult | PromiseLike<TResult>),
+        opts?: TOptions,
     ): Promise<TResult> {
         const DB = await this.openDatabase(opts);
         try {

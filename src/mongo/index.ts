@@ -62,7 +62,7 @@ export const MONGO_SCHEMAS: { [name: string]: mongoose.Schema } = {};
  * A MongoDB connection.
  */
 export class MongoDatabase {
-    private _mongo: mongoose.Mongoose;
+    private _mongo: mongoose.Connection;
 
     /**
      * Initializes a new instance of that class.
@@ -95,7 +95,7 @@ export class MongoDatabase {
             connStr += toStringSafe(this.options.options);
         }
 
-        this._mongo = await mongoose.connect(connStr, OPTS);
+        this._mongo = await mongoose.createConnection(connStr, OPTS);
 
         return true;
     }
@@ -110,33 +110,17 @@ export class MongoDatabase {
             return false;
         }
 
-        // await this.mongo.disconnect();
+        await this.mongo.close();
         this._mongo = null;
 
         return true;
     }
 
     /**
-     * Creates a new instance from the environment variables.
-     *
-     * @return {MongoDatabase} The new instance.
-     */
-    public static fromEnvironment(): MongoDatabase {
-        return new MongoDatabase({
-            database: process.env.MONGO_DB,
-            host: process.env.MONGO_HOST,
-            options: process.env.MONGO_OPTIONS,
-            port: parseInt( process.env.MONGO_PORT ),
-            password: process.env.MONGO_PASSWORD,
-            user: process.env.MONGO_USER,
-        });
-    }
-
-    /**
      * Gets if there is currently an open database connection or not.
      */
     public get isConnected() {
-        return !_.isNil(this.mongo);
+        return !_.isNil(this._mongo);
     }
 
     /**
@@ -147,13 +131,14 @@ export class MongoDatabase {
      * @return {mongoose.Model<mongoose.Document>} The model.
      */
     public model(name: string): mongoose.Model<mongoose.Document> {
-        return MONGO_MODELS[name];
+        return this.mongo
+                   .model(name, this.schema(name), name.toLowerCase());
     }
 
     /**
      * Gets the underlying database connection.
      */
-    public get mongo(): mongoose.Mongoose {
+    public get mongo(): mongoose.Connection {
         return this._mongo;
     }
 
