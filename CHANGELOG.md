@@ -1,5 +1,9 @@
 # Change Log (@egodigital/egoose)
 
+## 2.3.0
+
+* added automatic use of [errorhandler](https://www.npmjs.com/package/errorhandler) in `ApiHost` class, if in "local dev mode" (`IS_LOCAL_DEV` === `(true)`)
+
 ## 2.2.0
 
 * added [node-enumerable](https://www.npmjs.com/package/node-enumerable)

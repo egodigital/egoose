@@ -17,6 +17,7 @@
 
 import * as _ from 'lodash';
 import * as bodyParser from 'body-parser';
+import * as errorHandler from 'errorhandler';
 import { MongoDatabase, MongoDatabaseOptions } from '../mongo/index';
 import { Logger } from '../diagnostics/logger';
 import * as express from 'express';
@@ -208,6 +209,18 @@ export class ApiHost {
 
                 next();
             });
+
+            // error handler
+            NEW_API_ROOT.use(errorHandler({
+                log: (err, str, req) => {
+                    const LOG_MSG = `Error in [${ req.method }] '${ req.url }':
+
+${ str }`;
+
+                    this.logger
+                        .err(LOG_MSG, 'unhandled_error');
+                }
+            }));
         }
 
         this.setupLogger(NEW_LOGGER);
