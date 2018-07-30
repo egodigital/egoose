@@ -1,6 +1,6 @@
 # Change Log (@egodigital/egoose)
 
-## 2.1.0
+## 2.1.1
 
 * generic types for `query()` and `queryOne()` methods in `MongoDatabase` class
 

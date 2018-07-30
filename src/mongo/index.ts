@@ -128,9 +128,9 @@ export class MongoDatabase {
      *
      * @param {string} name The name of the model.
      *
-     * @return {mongoose.Model<mongoose.Document>} The model.
+     * @return {mongoose.Model<T>} The model.
      */
-    public model<T extends mongoose.Document = mongoose.Document>(name: string): mongoose.Model<mongoose.Document> {
+    public model<T extends mongoose.Document = mongoose.Document>(name: string): mongoose.Model<T> {
         return this.mongo
                    .model<T>(name, this.schema(name), name.toLowerCase());
     }
