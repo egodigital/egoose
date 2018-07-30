@@ -226,7 +226,7 @@ export class ApiHost {
         {
             let errHandlerOpts = this._useErrorHandler;
             if (_.isNil(errHandlerOpts)) {
-                errHandlerOpts = IS_LOCAL_DEV;
+                errHandlerOpts = false;
             }
 
             if (errHandlerOpts) {
