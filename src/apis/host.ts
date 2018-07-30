@@ -78,6 +78,11 @@ export type TokenAuthorizer = (token: string) => boolean | Promise<boolean>;
 export type UseBodyParserSetting = boolean | BodyParserOptions;
 
 /**
+ * Value for (or from) 'useBodyParser()' method of an ApiHost instance.
+ */
+export type UseErrorHandlerSetting = boolean | errorHandler.Options;
+
+/**
  * An API host.
  */
 export class ApiHost {
@@ -88,6 +93,7 @@ export class ApiHost {
     private _root: express.Router;
     private _server: HTTPServer;
     private _useBodyParser: UseBodyParserSetting = true;
+    private _useErrorHandler: UseErrorHandlerSetting;
 
     /**
      * Gets the underlying Express app instance.
@@ -209,24 +215,40 @@ export class ApiHost {
 
                 next();
             });
-
-            // error handler
-            NEW_API_ROOT.use(errorHandler({
-                log: (err, str, req) => {
-                    const LOG_MSG = `Error in [${ req.method }] '${ req.url }':
-
-${ str }`;
-
-                    this.logger
-                        .err(LOG_MSG, 'unhandled_error');
-                }
-            }));
         }
 
         this.setupLogger(NEW_LOGGER);
         this._logger = NEW_LOGGER;
 
         this.setupApi(NEW_APP, NEW_API_ROOT);
+
+        // error handler
+        {
+            let errHandlerOpts = this._useErrorHandler;
+            if (_.isNil(errHandlerOpts)) {
+                errHandlerOpts = IS_LOCAL_DEV;
+            }
+
+            if (errHandlerOpts) {
+                if (true === errHandlerOpts) {
+                    errHandlerOpts = {
+                        log: (err, str, req) => {
+                            const LOG_MSG = `Error in [${ req.method }] '${ req.url }':
+
+${ str }`;
+
+                            this.logger
+                                .err(LOG_MSG, 'unhandled_error');
+                        },
+                    };
+                }
+
+                NEW_API_ROOT.use(
+                    errorHandler(errHandlerOpts)
+                );
+            }
+        }
+
         this._app = NEW_APP;
         this._root = NEW_API_ROOT;
     }
@@ -443,6 +465,25 @@ ${ str }`;
         }
 
         return this._useBodyParser;
+    }
+
+    /**
+     * Gets or sets if 'errorhandler' module should be used or not.
+     *
+     * @param {UseErrorHandlerSetting} [newValue] The new value.
+     *
+     * @return {UseErrorHandlerSetting|this} The current value or that instance if new value has been set.
+     */
+    public useErrorHandler(): UseErrorHandlerSetting;
+    public useErrorHandler(newValue: UseErrorHandlerSetting): this;
+    public useErrorHandler(newValue?: UseErrorHandlerSetting): this | UseErrorHandlerSetting {
+        if (arguments.length > 0) {
+            this._useErrorHandler = newValue;
+
+            return this;
+        }
+
+        return this._useErrorHandler;
     }
 }
 
