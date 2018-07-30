@@ -130,9 +130,9 @@ export class MongoDatabase {
      *
      * @return {mongoose.Model<mongoose.Document>} The model.
      */
-    public model(name: string): mongoose.Model<mongoose.Document> {
+    public model<T extends mongoose.Document = mongoose.Document>(name: string): mongoose.Model<mongoose.Document> {
         return this.mongo
-                   .model(name, this.schema(name), name.toLowerCase());
+                   .model<T>(name, this.schema(name), name.toLowerCase());
     }
 
     /**
@@ -151,7 +151,7 @@ export class MongoDatabase {
      *
      * @return {mongoose.DocumentQuery<mongoose.Document[], mongoose.Document>} The query.
      */
-    public query(schema: string, func: string, ...args: any[]): mongoose.DocumentQuery<mongoose.Document[], mongoose.Document> {
+    public query<T extends mongoose.Document = mongoose.Document>(schema: string, func: string, ...args: any[]): mongoose.DocumentQuery<T[], T> {
         const M = this.model(schema);
 
         return M[func].apply(M, args);
@@ -166,7 +166,7 @@ export class MongoDatabase {
      *
      * @return {mongoose.DocumentQuery<mongoose.Document, mongoose.Document>} The query.
      */
-    public queryOne(schema: string, func: string, ...args: any[]): mongoose.DocumentQuery<mongoose.Document, mongoose.Document> {
+    public queryOne<T extends mongoose.Document = mongoose.Document>(schema: string, func: string, ...args: any[]): mongoose.DocumentQuery<T, T> {
         const M = this.model(schema);
 
         return M[func].apply(M, args);

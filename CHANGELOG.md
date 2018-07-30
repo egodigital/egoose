@@ -1,5 +1,9 @@
 # Change Log (@egodigital/egoose)
 
+## 2.1.0
+
+* generic types for `query()` and `queryOne()` methods in `MongoDatabase` class
+
 ## 2.0.0
 
 * improved use of `MongoApiHost` and `MongoDatabase` classes
