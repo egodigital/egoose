@@ -264,3 +264,5 @@ export * from './events';
 export * from './http';
 export * from './mongo';
 export * from './streams';
+
+export { asEnumerable, from, isEnumerable, isSequence, popFrom, random, range, repeat, shiftFrom } from 'node-enumerable';

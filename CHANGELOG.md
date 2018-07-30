@@ -1,5 +1,9 @@
 # Change Log (@egodigital/egoose)
 
+## 2.2.0
+
+* added [node-enumerable](https://www.npmjs.com/package/node-enumerable)
+
 ## 2.1.1
 
 * generic types for `query()` and `queryOne()` methods in `MongoDatabase` class
