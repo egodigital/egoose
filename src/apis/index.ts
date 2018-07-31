@@ -15,7 +15,7 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-import { asArray, cloneObj, normalizeString } from '../index';
+import { asArray, cloneObj, normalizeString, toStringSafe } from '../index';
 import * as _ from 'lodash';
 import { Response } from 'express';
 import { readFile, readFileSync } from 'fs-extra';
@@ -73,6 +73,16 @@ export interface ApiResult {
      * A value, which indicates if the operation was successfull or not.
      */
     success: boolean;
+}
+
+/**
+ * Additional options for 'sendResponse()' function.
+ */
+export interface SendResponseOptions {
+    /**
+     * A custom status code.
+     */
+    code?: number;
 }
 
 /**
@@ -154,10 +164,15 @@ export function importApiErrorsSync(errors: ImportApiErrorsArgument) {
  *
  * @param {Response} res The response context.
  * @param {ApiResult} result The result context.
+ * @param {SendResponseOptions} [opts] Custom options.
  *
  * @return {Response} The current response context.
  */
-export function sendResponse(res: Response, result: ApiResult): Response {
+export function sendResponse(res: Response, result: ApiResult, opts?: SendResponseOptions): Response {
+    if (_.isNil(opts)) {
+        opts = <any>{};
+    }
+
     const API_RESP: ApiResponse = {
         data: result.data,
         errors: asArray(result.errors).map(key => {
@@ -166,7 +181,12 @@ export function sendResponse(res: Response, result: ApiResult): Response {
         success: !!result.success,
     };
 
-    return res.status(200)
+    let code = parseInt(toStringSafe(opts.code).trim());
+    if (isNaN(code)) {
+        code = 200;
+    }
+
+    return res.status(code)
         .header('Content-type', 'application/json; charset=utf8')
         .send(new Buffer(JSON.stringify(API_RESP), 'utf8'));
 }

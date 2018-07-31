@@ -1,5 +1,9 @@
 # Change Log (@egodigital/egoose)
 
+## 2.4.0
+
+* added additional parameter for custom options in `sendResponse()` function
+
 ## 2.3.1
 
 * added `useErrorHandler()` to `ApiHost` class
