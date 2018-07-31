@@ -1,6 +1,6 @@
 # Change Log (@egodigital/egoose)
 
-## 2.3.0
+## 2.3.1
 
 * added `useErrorHandler()` to `ApiHost` class
 * added `applyFuncFor` and `toBooleanSafe()` functions
