@@ -1,5 +1,10 @@
 # Change Log (@egodigital/egoose)
 
+## 2.3.0
+
+* added `useErrorHandler()` to `ApiHost` class
+* added `applyFuncFor` and `toBooleanSafe()` functions
+
 ## 2.2.0
 
 * added [node-enumerable](https://www.npmjs.com/package/node-enumerable)

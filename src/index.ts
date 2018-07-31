@@ -30,6 +30,22 @@ import * as UUID from 'uuid';
 export type CompletedAction<TResult> = (err: any, result?: TResult) => void;
 
 /**
+ * Applies an object or value to a function.
+ *
+ * @param {TFunc} func The function to apply 'thisArg' to.
+ * @param {any} thisArg The object or value to apply to 'func'.
+ *
+ * @return {TFunc} The new function.
+ */
+export function applyFuncFor<TFunc extends Function = Function>(
+    func: TFunc, thisArg: any
+): TFunc {
+    return <any>function() {
+        return func.apply(thisArg, arguments);
+    };
+}
+
+/**
  * Returns an input value as array.
  *
  * @param {T|T[]} val The input value.
@@ -181,6 +197,26 @@ export function now(timezone?: string): moment.Moment {
     const NOW = moment();
     return '' === timezone ? NOW
                            : NOW.tz(timezone);
+}
+
+/**
+ * Returns a value as "real" boolean.
+ *
+ * @param {any} val The input value.
+ * @param {boolean} [defaultValue] The value to return if 'val' is (null) or (undefined).
+ *
+ * @return {boolean} The output value.
+ */
+export function toBooleanSafe(val: any, defaultValue = false): boolean {
+    if (_.isBoolean(val)) {
+        return val;
+    }
+
+    if (_.isNil(val)) {
+        return !!defaultValue;
+    }
+
+    return !!val;
 }
 
 /**
