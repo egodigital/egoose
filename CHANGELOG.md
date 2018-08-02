@@ -1,5 +1,9 @@
 # Change Log (@egodigital/egoose)
 
+## 2.4.1
+
+* fixed bodyParser warnings thrown by express
+
 ## 2.4.0
 
 * added additional parameter for custom options in `sendResponse()` function

@@ -141,7 +141,7 @@ export class ApiHost {
         const NEW_APP = express();
         if (opts.onAppCreated) {
             opts.onAppCreated
-                .apply(this, [ NEW_APP ]);
+                .apply(this, [NEW_APP]);
         }
 
         const NEW_LOGGER = new Logger();
@@ -155,13 +155,14 @@ export class ApiHost {
                 defaultCharset: 'utf8',
                 inflate: true,
                 strict: true,
+                extended: true
             };
             if (true !== this._useBodyParser) {
                 ubpOpts = MergeDeep(ubpOpts, this._useBodyParser);
             }
 
             NEW_API_ROOT.use(
-                bodyParser(ubpOpts)
+                bodyParser.json(ubpOpts)
             );
         }
 
@@ -187,7 +188,7 @@ export class ApiHost {
                 }
 
                 return res.status(401)
-                          .send();
+                    .send();
             });
         }
 
@@ -233,9 +234,9 @@ export class ApiHost {
                 if (true === errHandlerOpts) {
                     errHandlerOpts = {
                         log: (err, str, req) => {
-                            const LOG_MSG = `Error in [${ req.method }] '${ req.url }':
+                            const LOG_MSG = `Error in [${req.method}] '${req.url}':
 
-${ str }`;
+${ str}`;
 
                             this.logger
                                 .err(LOG_MSG, 'unhandled_error');
@@ -493,7 +494,7 @@ ${ str }`;
 export class MongoApiHost<
     TDatabase extends MongoDatabase = MongoDatabase,
     TOptions extends MongoDatabaseOptions = MongoDatabaseOptions,
-> extends ApiHost {
+    > extends ApiHost {
     /**
      * Returns the database class.
      *
