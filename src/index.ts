@@ -297,6 +297,7 @@ export * from './apis/index';
 export * from './dev';
 export * from './diagnostics/logger';
 export * from './events';
+export * from './geo';
 export * from './http';
 export * from './mongo';
 export * from './streams';

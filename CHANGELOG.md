@@ -1,5 +1,9 @@
 # Change Log (@egodigital/egoose)
 
+## 2.5.0
+
+* added `calcDistance()` function
+
 ## 2.4.1
 
 * fixed bodyParser warnings thrown by express
