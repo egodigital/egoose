@@ -380,14 +380,21 @@ ${ str}`;
     /**
      * Starts the host.
      *
-     * @param {number} [port] The custom port to use.
+     * @param {number} [port] The custom port to use. By default 'APP_PORT' environment variable is used.
+     *                        Otherwise 80 is the default port.
      *
      * @return {Promise<boolean>} The promise, which indicates if operation successful or not.
      */
     public start(port?: number): Promise<boolean> {
-        port = parseInt(
-            toStringSafe(port).trim()
-        );
+        if (arguments.length < 1) {
+            port = parseInt(
+                toStringSafe(process.env.APP_PORT).trim()
+            );
+        } else {
+            port = parseInt(
+                toStringSafe(port).trim()
+            );
+        }
 
         return new Promise<boolean>((resolve, reject) => {
             if (this.isRunning) {

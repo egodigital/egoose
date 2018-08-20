@@ -1,5 +1,9 @@
 # Change Log (@egodigital/egoose)
 
+## 2.6.0
+
+* using `APP_PORT` environment variable as default value for `start()` method of `ApiHost` class now
+
 ## 2.5.1
 
 * `sendResponse()` uses `utf-8` instead of `utf8` now
