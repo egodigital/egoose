@@ -1,5 +1,9 @@
 # Change Log (@egodigital/egoose)
 
+## 2.5.1
+
+* `sendResponse()` uses `utf-8` instead of `utf8` now
+
 ## 2.5.0
 
 * added `calcDistance()` function

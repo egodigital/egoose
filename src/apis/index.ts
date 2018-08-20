@@ -187,6 +187,6 @@ export function sendResponse(res: Response, result: ApiResult, opts?: SendRespon
     }
 
     return res.status(code)
-        .header('Content-type', 'application/json; charset=utf8')
+        .header('Content-type', 'application/json; charset=utf-8')
         .send(new Buffer(JSON.stringify(API_RESP), 'utf8'));
 }
