@@ -1,5 +1,10 @@
 # Change Log (@egodigital/egoose)
 
+## 2.7.0
+
+* added `forEachAsync()` function
+* updated to `mongoose@5.2.9`
+
 ## 2.6.0
 
 * using `APP_PORT` environment variable as default value for `start()` method of `ApiHost` class now

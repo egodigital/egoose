@@ -16,6 +16,7 @@
  */
 
 import * as _ from 'lodash';
+import * as Enumerable from 'node-enumerable';
 import * as moment from 'moment';
 // @ts-ignore
 import * as momentTZ from 'moment-timezone';  // REQUIRED EXTENSION FOR moment MODULE!!!
@@ -28,6 +29,14 @@ import * as UUID from 'uuid';
  * @param {TResult} [result] The result.
  */
 export type CompletedAction<TResult> = (err: any, result?: TResult) => void;
+
+/**
+ * An action for an async 'forEach'.
+ *
+ * @param {T} item The current item.
+ * @param {number} index The zero-based index.
+ */
+export type ForEachAsyncAction<T> = (item: T, index: number) => void | Promise<void>;
 
 /**
  * Applies an object or value to a function.
@@ -151,6 +160,26 @@ export function createCompletedAction<TResult = any>(resolve: (value?: TResult |
             }
         }
     };
+}
+
+/**
+ * An async 'forEach'.
+ *
+ * @param {Enumerable.Sequence<T>} seq The sequence or array to iterate.
+ * @param {ForEachAsyncAction<T>} action The action to invoke.
+ */
+export async function forEachAsync<T>(
+    seq: Enumerable.Sequence<T>,
+    action: ForEachAsyncAction<T>,
+) {
+    let i = -1;
+    for (const ITEM of <any>seq) {
+        ++i;
+
+        await Promise.resolve(
+            action(ITEM, i)
+        );
+    }
 }
 
 /**
