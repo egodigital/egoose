@@ -1,5 +1,9 @@
 # Change Log (@egodigital/egoose)
 
+## 2.7.2
+
+* updated to `@types/mongoose@5.2.7`
+
 ## 2.7.1
 
 * updated to `mongoose@5.2.10`

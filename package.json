@@ -1,6 +1,6 @@
 {
   "name": "@egodigital/egoose",
-  "version": "2.7.1",
+  "version": "2.7.2",
   "description": "Helper classes and functions for Node.js 8 or later.",
   "main": "lib/index.js",
   "private": false,
@@ -51,7 +51,7 @@
     "@types/mocha": "^5.2.5",
     "@types/moment": "^2.13.0",
     "@types/moment-timezone": "^0.5.8",
-    "@types/mongoose": "^5.2.6",
+    "@types/mongoose": "^5.2.7",
     "@types/node": "^8.10.27",
     "@types/uuid": "^3.4.3",
     "body-parser": "^1.18.3",
