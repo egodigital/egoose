@@ -1,5 +1,9 @@
 # Change Log (@egodigital/egoose)
 
+## 2.7.1
+
+* updated to `mongoose@5.2.10`
+
 ## 2.7.0
 
 * added `forEachAsync()` function
