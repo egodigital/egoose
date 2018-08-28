@@ -1,6 +1,6 @@
 {
   "name": "@egodigital/egoose",
-  "version": "2.7.3",
+  "version": "2.7.4",
   "description": "Helper classes and functions for Node.js 8 or later.",
   "main": "lib/index.js",
   "private": false,
@@ -10,7 +10,6 @@
   "scripts": {
     "build": "(rm -r ./lib || true) && (\"./node_modules/.bin/tsc\" && \"./node_modules/.bin/tsc\" -d)",
     "doc": "(rm -r ./doc || true) && (\"./node_modules/.bin/typedoc\" --out ./doc ./src)",
-    "publish": "npm run build && npm publish",
     "test": "./node_modules/.bin/mocha ./lib/test/**/*.js"
   },
   "repository": {

@@ -34,6 +34,14 @@ npm run build
 
 from same folder.
 
+### Publish
+
+FIRST [BUILD](#build) THE MODULE BEFORE PUBLISH!
+
+```bash
+npm run build && npm publish
+```
+
 ### Documentation
 
 Execute
