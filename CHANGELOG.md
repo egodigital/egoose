@@ -1,5 +1,11 @@
 # Change Log (@egodigital/egoose)
 
+## 2.8.0
+
+* added `tempFile()` and `tempFileSync()` functions
+* fixed `guid` / `uuid` functions when using version 5
+* updated to `mongoose@5.2.12`
+
 ## 2.7.3
 
 * update scripts

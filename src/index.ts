@@ -21,6 +21,7 @@ import * as moment from 'moment';
 // @ts-ignore
 import * as momentTZ from 'moment-timezone';  // REQUIRED EXTENSION FOR moment MODULE!!!
 import * as UUID from 'uuid';
+import * as UUID_v5 from 'uuid/v5';
 
 /**
  * Describes a simple 'completed' action.
@@ -314,8 +315,7 @@ export function uuid(version?: string, ...args: any[]): string {
 
         case '5':
         case 'v5':
-            return UUID.v5
-                       .apply(null, args);
+            return UUID_v5.apply(null, args);
     }
 
     throw new Error(`Version '${ version }' is not supported`);
@@ -326,6 +326,7 @@ export * from './apis/index';
 export * from './dev';
 export * from './diagnostics/logger';
 export * from './events';
+export * from './fs';
 export * from './geo';
 export * from './http';
 export * from './mongo';
