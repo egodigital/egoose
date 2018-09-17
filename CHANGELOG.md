@@ -1,5 +1,12 @@
 # Change Log (@egodigital/egoose)
 
+## 2.9.0
+
+* added optional `errorKeysOnly` property to `SendResponseOptions` interface
+* added `AzureStorageClient` class
+* updated to `lodash@4.17.11`
+* updated to `mongoose@5.2.14`
+
 ## 2.8.0
 
 * added `tempFile()` and `tempFileSync()` functions

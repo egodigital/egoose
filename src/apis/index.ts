@@ -15,7 +15,7 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-import { asArray, cloneObj, normalizeString, toStringSafe } from '../index';
+import { asArray, cloneObj, normalizeString, toBooleanSafe, toStringSafe } from '../index';
 import * as _ from 'lodash';
 import { Response } from 'express';
 import { readFile, readFileSync } from 'fs-extra';
@@ -53,7 +53,7 @@ export interface ApiErrorWithKey extends ApiError {
 
 interface ApiResponse {
     data: any;
-    errors: ApiError[];
+    errors: string[] | ApiError[];
     success: boolean;
 }
 
@@ -83,6 +83,10 @@ export interface SendResponseOptions {
      * A custom status code.
      */
     code?: number;
+    /**
+     * Returns error keys only or ApiError objects.
+     */
+    errorKeysOnly?: boolean;
 }
 
 /**
@@ -175,15 +179,23 @@ export function sendResponse(res: Response, result: ApiResult, opts?: SendRespon
 
     const API_RESP: ApiResponse = {
         data: result.data,
-        errors: asArray(result.errors).map(key => {
-            return API_ERRORS[key];
-        }),
+        errors: undefined,
         success: !!result.success,
     };
 
     let code = parseInt(toStringSafe(opts.code).trim());
     if (isNaN(code)) {
         code = 200;
+    }
+
+    if (toBooleanSafe(opts.errorKeysOnly)) {
+        API_RESP.errors = asArray(result.errors).map(key => {
+            return toStringSafe(key);
+        });
+    } else {
+        API_RESP.errors = asArray(result.errors).map(key => {
+            return API_ERRORS[key];
+        });
     }
 
     return res.status(code)
