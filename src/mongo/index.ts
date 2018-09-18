@@ -183,3 +183,24 @@ export class MongoDatabase {
         return MONGO_SCHEMAS[name];
     }
 }
+
+/**
+ * Checks if a value can be used as Mongo object ID or not.
+ *
+ * @param {any} val The value to check.
+ *
+ * @return {boolean} Can be used as object ID or not.
+ */
+export function isMongoId(val: any): boolean {
+    try {
+        if (!_.isNil(val)) {
+            return !_.isNil(
+                new mongoose.Types.ObjectId(
+                    val
+                )
+            );
+        }
+    } catch { }
+
+    return false;
+}

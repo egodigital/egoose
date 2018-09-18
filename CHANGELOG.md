@@ -1,5 +1,10 @@
 # Change Log (@egodigital/egoose)
 
+## 2.10.0
+
+* added `isMongoId()` function
+* updated to `mongoose@5.2.15`
+
 ## 2.9.0
 
 * added optional `errorKeysOnly` property to `SendResponseOptions` interface
