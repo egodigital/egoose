@@ -332,5 +332,6 @@ export * from './geo';
 export * from './http';
 export * from './mongo';
 export * from './streams';
+export * from './system';
 
 export { asEnumerable, from, isEnumerable, isSequence, popFrom, random, range, repeat, shiftFrom } from 'node-enumerable';

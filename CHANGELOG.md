@@ -1,5 +1,12 @@
 # Change Log (@egodigital/egoose)
 
+## 2.11.0
+
+* added `createMonitoringApiResult()` function
+* added `getCpuUsage()` function
+* added `getDiskSpace()` function
+* updated to `mongoose@5.2.17`
+
 ## 2.10.0
 
 * added `isMongoId()` function
