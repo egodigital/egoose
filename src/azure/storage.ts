@@ -20,9 +20,9 @@ import * as azureStorage from 'azure-storage';
 import * as crypto from 'crypto';
 import * as isStream from 'is-stream';
 import * as mimeTypes from 'mime-types';
-import { IS_DEV } from '../dev';
+import * as sanitizeFilename from 'sanitize-filename';
 import { readAll } from '../streams';
-import { toStringSafe, uuid, toBooleanSafe } from '../index';
+import { normalizeString, toStringSafe, uuid, toBooleanSafe } from '../index';
 import { createWriteStream, readFileSync } from 'fs-extra';
 import { dirname, extname, join as joinPaths } from 'path';
 import { tempFile } from '../fs';
@@ -373,7 +373,15 @@ export function normalizeAzureBlobPath(p: string): string {
 }
 
 function toFullBlobPath(p: string) {
-    return (IS_DEV ?
-        'dev/' :
-        'prod/') + normalizeAzureBlobPath(p);
+    let prefix = sanitizeFilename(
+        normalizeString(
+            process.env.APP_ENV
+        )
+    );
+    if ('' === prefix) {
+        prefix = 'prod';
+    }
+
+    return prefix + '/' +
+        normalizeAzureBlobPath(p);
 }
