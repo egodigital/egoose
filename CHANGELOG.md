@@ -1,11 +1,11 @@
 # Change Log (@egodigital/egoose)
 
-## 3.0.0
+## 3.0.1
 
 * default path prefix for Azure blob now using `APP_ENV` value with `prod` as default
+* set to `mongoose@5.2.17`
 * updated to `chai@4.2.0`
 * updated to `fast-glob@2.2.3`
-* updated to `mongoose@5.3.2`
 
 ## 2.11.0
 
