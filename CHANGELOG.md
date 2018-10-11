@@ -1,5 +1,10 @@
 # Change Log (@egodigital/egoose)
 
+## 3.1.0
+
+* fixed `loadBlob()` method of `AzureStorageClient` class
+* updated to `express@4.16.4`
+
 ## 3.0.1
 
 * default path prefix for Azure blob now using `APP_ENV` value with `prod` as default

@@ -205,7 +205,7 @@ export class AzureStorageClient {
                                         rej(err);
                                     } else {
                                         try {
-                                            resolve(
+                                            res(
                                                 readFileSync(tmpFile)
                                             );
                                         } catch (e) {
