@@ -1,5 +1,11 @@
 # Change Log (@egodigital/egoose)
 
+## 3.2.0
+
+* added `mongooseOptions` property to `MongoDatabaseOptions` interface
+* updated to `azure-storage@2.10.2`
+* updated to `mime-types@2.1.21`
+
 ## 3.1.0
 
 * fixed `loadBlob()` method of `AzureStorageClient` class

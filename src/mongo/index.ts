@@ -17,6 +17,7 @@
 
 import * as _ from 'lodash';
 import { isEmptyString, toStringSafe } from '../index';
+import * as MergeDeep from 'merge-deep';
 import * as mongoose from 'mongoose';
 
 /**
@@ -31,6 +32,10 @@ export interface MongoDatabaseOptions {
      * The host address.
      */
     readonly host: string;
+    /**
+     * Custom options for an underlying (mongoose) connection.
+     */
+    readonly mongooseOptions?: mongoose.ConnectionOptions;
     /**
      * Additional options for the connection string.
      */
@@ -95,7 +100,10 @@ export class MongoDatabase {
             connStr += toStringSafe(this.options.options);
         }
 
-        this._mongo = await mongoose.createConnection(connStr, OPTS);
+        this._mongo = await mongoose.createConnection(
+            connStr,
+            MergeDeep(OPTS, this.options.mongooseOptions)
+        );
 
         return true;
     }
