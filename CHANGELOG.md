@@ -1,5 +1,9 @@
 # Change Log (@egodigital/egoose)
 
+## 3.3.0
+
+* changed `mongooseOptions` datatype to `any`
+
 ## 3.2.0
 
 * added `mongooseOptions` property to `MongoDatabaseOptions` interface

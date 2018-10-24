@@ -35,7 +35,7 @@ export interface MongoDatabaseOptions {
     /**
      * Custom options for an underlying (mongoose) connection.
      */
-    readonly mongooseOptions?: mongoose.ConnectionOptions;
+    readonly mongooseOptions?: any;
     /**
      * Additional options for the connection string.
      */
