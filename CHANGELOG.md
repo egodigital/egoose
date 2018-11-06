@@ -1,5 +1,10 @@
 # Change Log (@egodigital/egoose)
 
+## 3.3.1
+
+* fixed `saveUniqueBlob()` method of `AzureStorageClient` class
+* updated to `moment-timezone@0.5.23`
+
 ## 3.3.0
 
 * changed `mongooseOptions` datatype to `any`

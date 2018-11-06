@@ -24,7 +24,7 @@ import * as sanitizeFilename from 'sanitize-filename';
 import { readAll } from '../streams';
 import { normalizeString, toStringSafe, uuid, toBooleanSafe } from '../index';
 import { createWriteStream, readFileSync } from 'fs-extra';
-import { dirname, extname, join as joinPaths } from 'path';
+import { dirname, extname, join as joinPaths, sep as pathSep } from 'path';
 import { tempFile } from '../fs';
 
 /**
@@ -337,9 +337,7 @@ export class AzureStorageClient {
         const BLOB_NAME_NEW = toStringSafe(
             await Promise.resolve(
                 blobNameCreator(
-                    toStringSafe(
-                        await this.toFullPath(path)
-                    )
+                    toStringSafe(path)
                 )
             )
         );
@@ -382,6 +380,9 @@ function toFullBlobPath(p: string) {
         prefix = 'prod';
     }
 
-    return prefix + '/' +
+    let fullPath = prefix + '/' +
         normalizeAzureBlobPath(p);
+    fullPath = fullPath.split(pathSep).join('/');
+
+    return fullPath;
 }
