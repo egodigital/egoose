@@ -1,6 +1,6 @@
 # Change Log (@egodigital/egoose)
 
-## 3.3.2
+## 3.3.4
 
 * fixed `saveUniqueBlob()` method of `AzureStorageClient` class
 * updated to `moment-timezone@0.5.23`

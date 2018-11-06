@@ -341,7 +341,10 @@ export class AzureStorageClient {
         );
 
         await this.saveBlob(BLOB_NAME_NEW, data);
-        return BLOB_NAME_NEW;
+
+        return await this.toFullPath(
+            BLOB_NAME_NEW
+        );
     }
 
     private toFullPath(p: string) {
