@@ -325,11 +325,9 @@ export class AzureStorageClient {
                     Math.random() * 597923979
                 ) }_tmmk`;
 
-                return this.toFullPath(
-                    joinPaths(
-                        BLOB_DIR,
-                        BLOB_NAME + BLOB_EXT,
-                    )
+                return joinPaths(
+                    BLOB_DIR,
+                    BLOB_NAME + BLOB_EXT,
                 );
             };
         }
