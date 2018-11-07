@@ -17,8 +17,14 @@
 
 import * as _ from 'lodash';
 import * as fs from 'fs-extra';
+import { Stats as FSStats } from 'fs';
 import * as tmp from 'tmp';
 import { toBooleanSafe, toStringSafe } from '../index';
+
+/**
+ * A value, that can be used as file system path.
+ */
+export type FileSystemPath = string | Buffer;
 
 /**
  * Options for temp file execution.
@@ -40,6 +46,263 @@ export interface TempFileOptions {
      * Suffix for the filename.
      */
     suffix?: string;
+}
+
+async function checkExistingFSItemByStats(
+    path: FileSystemPath, useLSTAT: boolean,
+    flagProvider: (stats: FSStats) => boolean,
+) {
+    useLSTAT = toBooleanSafe(useLSTAT);
+
+    if (await exists(path)) {
+        return flagProvider(
+            await (useLSTAT ? fs.lstat : fs.stat)(path)
+        );
+    }
+
+    return false;
+}
+
+function checkExistingFSItemByStatsSync(
+    path: FileSystemPath, useLSTAT: boolean,
+    flagProvider: (stats: FSStats) => boolean,
+) {
+    useLSTAT = toBooleanSafe(useLSTAT);
+
+    if (fs.existsSync(path)) {
+        return flagProvider(
+            (useLSTAT ? fs.lstatSync : fs.statSync)(path)
+        );
+    }
+
+    return false;
+}
+
+/**
+ * Promise version of 'fs.exists()'.
+ *
+ * @param {string} path The path.
+ *
+ * @return {Promise<boolean>} The promise that indicates if path exists or not.
+ */
+export function exists(path: fs.PathLike): Promise<boolean> {
+    return new Promise<boolean>((resolve, reject) => {
+        try {
+            fs.exists(path, (itemExists) => {
+                resolve(itemExists);
+            });
+        } catch (e) {
+            reject(e);
+        }
+    });
+}
+
+/**
+ * Checks if a path represents an existing block device.
+ *
+ * @param {FileSystemPath} path The path to check.
+ * @param {boolean} [useLSTAT] Use 'fs.lstat()' function instead of 'fs.stat()'.
+ *
+ * @return {Promise<boolean>} The promise with the boolean that represents if path is a block device or not.
+ */
+export function isBlockDevice(path: FileSystemPath, useLSTAT?: boolean): Promise<boolean> {
+    return checkExistingFSItemByStats(
+        path, useLSTAT,
+        (stats) => stats.isBlockDevice(),
+    );
+}
+
+/**
+ * Checks if a path represents an existing block device (synchronous).
+ *
+ * @param {FileSystemPath} path The path to check.
+ * @param {boolean} [useLSTAT] Use 'fs.lstatSync()' function instead of 'fs.statSync()'.
+ *
+ * @return {boolean} The boolean that represents if path is a block device or not.
+ */
+export function isBlockDeviceSync(path: FileSystemPath, useLSTAT?: boolean): boolean {
+    return checkExistingFSItemByStatsSync(
+        path, useLSTAT,
+        (stats) => stats.isBlockDevice(),
+    );
+}
+
+/**
+ * Checks if a path represents an existing block device.
+ *
+ * @param {FileSystemPath} path The path to check.
+ * @param {boolean} [useLSTAT] Use 'fs.lstat()' function instead of 'fs.stat()'.
+ *
+ * @return {Promise<boolean>} The promise with the boolean that represents if path is a block device or not.
+ */
+export function isCharDevice(path: FileSystemPath, useLSTAT?: boolean): Promise<boolean> {
+    return checkExistingFSItemByStats(
+        path, useLSTAT,
+        (stats) => stats.isCharacterDevice(),
+    );
+}
+
+/**
+ * Checks if a path represents an existing character device (synchronous).
+ *
+ * @param {FileSystemPath} path The path to check.
+ * @param {boolean} [useLSTAT] Use 'fs.lstatSync()' function instead of 'fs.statSync()'.
+ *
+ * @return {boolean} The boolean that represents if path is a character device or not.
+ */
+export function isCharDeviceSync(path: FileSystemPath, useLSTAT?: boolean): boolean {
+    return checkExistingFSItemByStatsSync(
+        path, useLSTAT,
+        (stats) => stats.isCharacterDevice(),
+    );
+}
+
+/**
+ * Checks if a path represents an existing FIFO.
+ *
+ * @param {FileSystemPath} path The path to check.
+ * @param {boolean} [useLSTAT] Use 'fs.lstat()' function instead of 'fs.stat()'.
+ *
+ * @return {Promise<boolean>} The promise with the boolean that represents if path is a FIFO or not.
+ */
+export function isFIFO(path: FileSystemPath, useLSTAT?: boolean): Promise<boolean> {
+    return checkExistingFSItemByStats(
+        path, useLSTAT,
+        (stats) => stats.isFIFO(),
+    );
+}
+
+/**
+ * Checks if a path represents an existing FIFO (synchronous).
+ *
+ * @param {FileSystemPath} path The path to check.
+ * @param {boolean} [useLSTAT] Use 'fs.lstatSync()' function instead of 'fs.statSync()'.
+ *
+ * @return {boolean} The boolean that represents if path is a FIFO or not.
+ */
+export function isFIFOSync(path: FileSystemPath, useLSTAT?: boolean): boolean {
+    return checkExistingFSItemByStatsSync(
+        path, useLSTAT,
+        (stats) => stats.isFIFO(),
+    );
+}
+
+/**
+ * Checks if a path represents an existing directory.
+ *
+ * @param {FileSystemPath} path The path to check.
+ * @param {boolean} [useLSTAT] Use 'fs.lstat()' function instead of 'fs.stat()'.
+ *
+ * @return {Promise<boolean>} The promise with the boolean that represents if path is a directory or not.
+ */
+export function isDir(path: FileSystemPath, useLSTAT?: boolean): Promise<boolean> {
+    return checkExistingFSItemByStats(
+        path, useLSTAT,
+        (stats) => stats.isDirectory(),
+    );
+}
+
+/**
+ * Checks if a path represents an existing directory (synchronous).
+ *
+ * @param {FileSystemPath} path The path to check.
+ * @param {boolean} [useLSTAT] Use 'fs.lstatSync()' function instead of 'fs.statSync()'.
+ *
+ * @return {boolean} The boolean that represents if path is a directory or not.
+ */
+export function isDirSync(path: FileSystemPath, useLSTAT?: boolean): boolean {
+    return checkExistingFSItemByStatsSync(
+        path, useLSTAT,
+        (stats) => stats.isDirectory(),
+    );
+}
+
+/**
+ * Checks if a path represents an existing file.
+ *
+ * @param {FileSystemPath} path The path to check.
+ * @param {boolean} [useLSTAT] Use 'fs.lstat()' function instead of 'fs.stat()'.
+ *
+ * @return {Promise<boolean>} The promise with the boolean that represents if path is a file or not.
+ */
+export function isFile(path: FileSystemPath, useLSTAT?: boolean): Promise<boolean> {
+    return checkExistingFSItemByStats(
+        path, useLSTAT,
+        (stats) => stats.isFile(),
+    );
+}
+
+/**
+ * Checks if a path represents an existing file (synchronous).
+ *
+ * @param {FileSystemPath} path The path to check.
+ * @param {boolean} [useLSTAT] Use 'fs.lstatSync()' function instead of 'fs.statSync()'.
+ *
+ * @return {boolean} The boolean that represents if path is a file or not.
+ */
+export function isFileSync(path: FileSystemPath, useLSTAT?: boolean): boolean {
+    return checkExistingFSItemByStatsSync(
+        path, useLSTAT,
+        (stats) => stats.isFile(),
+    );
+}
+
+/**
+ * Checks if a path represents an existing socket.
+ *
+ * @param {FileSystemPath} path The path to check.
+ * @param {boolean} [useLSTAT] Use 'fs.lstat()' function instead of 'fs.stat()'.
+ *
+ * @return {Promise<boolean>} The promise with the boolean that represents if path is a socket or not.
+ */
+export function isSocket(path: FileSystemPath, useLSTAT?: boolean): Promise<boolean> {
+    return checkExistingFSItemByStats(
+        path, useLSTAT,
+        (stats) => stats.isSocket(),
+    );
+}
+
+/**
+ * Checks if a path represents an existing socket (synchronous).
+ *
+ * @param {FileSystemPath} path The path to check.
+ * @param {boolean} [useLSTAT] Use 'fs.lstatSync()' function instead of 'fs.statSync()'.
+ *
+ * @return {boolean} The boolean that represents if path is a socket or not.
+ */
+export function isSocketSync(path: FileSystemPath, useLSTAT?: boolean): boolean {
+    return checkExistingFSItemByStatsSync(
+        path, useLSTAT,
+        (stats) => stats.isSocket(),
+    );
+}
+
+/**
+ * Checks if a path represents an existing symbolic link.
+ *
+ * @param {FileSystemPath} path The path to check.
+ *
+ * @return {Promise<boolean>} The promise with the boolean that represents if path is a symbolic link or not.
+ */
+export function isSymLink(path: FileSystemPath): Promise<boolean> {
+    return checkExistingFSItemByStats(
+        path, true,
+        (stats) => stats.isSymbolicLink(),
+    );
+}
+
+/**
+ * Checks if a path represents an existing symbolic link (synchronous).
+ *
+ * @param {FileSystemPath} path The path to check.
+ *
+ * @return {boolean} The boolean that represents if path is a symbolic link or not.
+ */
+export function isSymLinkSync(path: FileSystemPath): boolean {
+    return checkExistingFSItemByStatsSync(
+        path, true,
+        (stats) => stats.isSymbolicLink(),
+    );
 }
 
 /**

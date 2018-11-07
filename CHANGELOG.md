@@ -1,5 +1,15 @@
 # Change Log (@egodigital/egoose)
 
+## 3.4.0
+
+* added `exists()` function
+* added `isBlockDevice()` and `isBlockDeviceSync()` functions
+* added `isCharDevice()` and `isCharDeviceSync()` functions
+* added `isDir()` and `isDirSync()` functions
+* added `isFile()` and `isFileSync()` functions
+* added `isSymLink()` and `isSymLinkSync()` functions
+* updated to `fs-extra@7.0.1`
+
 ## 3.3.4
 
 * fixed `saveUniqueBlob()` method of `AzureStorageClient` class
