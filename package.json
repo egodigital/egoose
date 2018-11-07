@@ -10,7 +10,7 @@
   "scripts": {
     "build": "(rm -r ./lib || true) && (\"./node_modules/.bin/tsc\" && \"./node_modules/.bin/tsc\" -d)",
     "build_and_test": "npm run build && npm run test",
-    "deploy": "npm run build_and_test && npm publish",
+    "deploy": "npm install && npm run build_and_test && npm publish",
     "doc": "(rm -r ./doc || true) && (\"./node_modules/.bin/typedoc\" --out ./doc ./src)",
     "test": "./node_modules/.bin/mocha ./lib/test/**/*.js"
   },
