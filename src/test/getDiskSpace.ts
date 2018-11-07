@@ -19,9 +19,9 @@ import * as assert from 'assert';
 import { describe, it } from 'mocha';
 import { getDiskSpace } from '../system';
 
-describe('#getCpuUsage()', async function() {
-    await describe('Number', async function() {
-        await it('should return an object', async function() {
+describe('#getDiskSpace()', async function() {
+    describe('Number', async function() {
+        it('should return an object', async function() {
             const VALUE = await getDiskSpace();
 
             assert.ok(typeof VALUE === 'object');

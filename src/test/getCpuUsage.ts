@@ -20,8 +20,8 @@ import { describe, it } from 'mocha';
 import { getCpuUsage } from '../system';
 
 describe('#getCpuUsage()', async function() {
-    await describe('Number', async function() {
-        await it('should return a number', async function() {
+    describe('Number', async function() {
+        it('should return a number', async function() {
             const VALUE = await getCpuUsage();
 
             assert.ok(typeof VALUE === 'number');

@@ -21,8 +21,8 @@ import { readAll } from '../index';
 import * as stream from 'stream';
 
 describe('#readAll()', async function() {
-    await describe('Buffer', async function() {
-        await it('should return same data as input', async function() {
+    describe('Buffer', async function() {
+        it('should return same data as input', async function() {
             for (let i = 0; i < 1000; i++) {
                 const IN_STR = (new Array(i)).map(x => 'TMäöüMK')
                     .join('');

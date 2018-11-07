@@ -20,8 +20,8 @@ import { describe, it } from 'mocha';
 import { createMonitoringApiResult } from '../apis/index';
 
 describe('#createMonitoringApiResult()', async function() {
-    await describe('Object', async function() {
-        await it('should return an object', async function() {
+    describe('Object', async function() {
+        it('should return an object', async function() {
             const OBJ = await createMonitoringApiResult();
 
             assert.ok(typeof OBJ === 'object');
