@@ -17,9 +17,7 @@
 
 import * as _ from 'lodash';
 import * as Enumerable from 'node-enumerable';
-import * as moment from 'moment';
-// @ts-ignore
-import * as momentTZ from 'moment-timezone';  // REQUIRED EXTENSION FOR moment MODULE!!!
+import * as moment from 'moment-timezone';
 import * as UUID from 'uuid';
 import * as UUID_v5 from 'uuid/v5';
 
