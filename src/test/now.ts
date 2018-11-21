@@ -18,20 +18,20 @@
 import * as assert from 'assert';
 import { describe, it } from 'mocha';
 import  * as egoose from '../index'
-
+import  * as moment from 'moment';
 
 describe('#now(tz)', function() {
     describe('with timezone', function() {
         it('should return a moment js object', async function() {
             const VALUE = egoose.now('CET');
-            assert.ok(typeof VALUE === 'object');
+            assert.ok(typeof VALUE === 'object' && moment.isMoment(VALUE));
         });
     });
 
     describe('without timezone', function() {
         it('should return a moment js object', async function() {
             const VALUE = egoose.now();
-            assert.ok(typeof VALUE === 'object');
+            assert.ok(typeof VALUE === 'object' && moment.isMoment(VALUE));
         });
     });
 
