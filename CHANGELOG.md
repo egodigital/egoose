@@ -1,5 +1,16 @@
 # Change Log (@egodigital/egoose)
 
+## 3.5.0
+
+* added `timeout` property to `HttpRequestOptions` interface
+* added `readBody`, `readJSON` and `readString` method to `HttpResponse` interface
+* updated to `fast-glob@2.2.4`
+
+## 3.4.1
+
+* corrected now(tz) bug
+* added test
+
 ## 3.4.0
 
 * added `exists()` function

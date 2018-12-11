@@ -50,6 +50,10 @@ export interface HttpRequestOptions {
      * The custom headers to send.
      */
     headers?: any;
+    /**
+     * Custom request timeout.
+     */
+    timeout?: number;
 }
 
 /**
@@ -82,7 +86,7 @@ export interface HttpResponse {
     /**
      * The response headers.
      */
-    headers: any;
+    headers: HTTP.IncomingHttpHeaders;
     /**
      * Pipes the response body to a target.
      *
@@ -97,6 +101,22 @@ export interface HttpResponse {
      * @return {Promise<Buffer>} The promise with the data.
      */
     readBody(): Promise<Buffer>;
+    /**
+     * Reads the body and handles it as JSON object.
+     *
+     * @param {string} [enc] The custom string encoding to use.
+     *
+     * @return {Promise<T>} The promise with the parsed JSON object.
+     */
+    readJSON<T = any>(enc?: string): Promise<T>;
+    /**
+     * Reads the body and handles it as string.
+     *
+     * @param {string} [enc] The custom string encoding to use.
+     *
+     * @return {Promise<string>} The promise with response body as string.
+     */
+    readString(enc?: string): Promise<string>;
     /**
      * The request context.
      */
@@ -268,12 +288,25 @@ export function request(method: string, u: HttpRequestUrl, opts?: HttpRequestOpt
                     pipe: function (target) {
                         return response.pipe(target);
                     },
-                    readBody: async () => {
+                    readBody: async function() {
                         if (false === respBody) {
                             respBody = await readAll(response);
                         }
 
                         return respBody;
+                    },
+                    readJSON: async function(enc?) {
+                        return JSON.parse(
+                            await this.readString(enc)
+                        );
+                    },
+                    readString: async function(enc?) {
+                        enc = normalizeString(enc);
+                        if ('' === enc) {
+                            enc = 'utf8';
+                        }
+
+                        return (await this.readBody()).toString(enc);
                     },
                     request: request,
                     response: response,
@@ -297,6 +330,13 @@ export function request(method: string, u: HttpRequestUrl, opts?: HttpRequestOpt
                         )
                     ] = toStringSafe(opts.headers[H]);
                 }
+            }
+
+            let timeout = parseInt(
+                toStringSafe(opts.timeout).trim()
+            );
+            if (!isNaN(timeout)) {
+                REQUEST_OPTS.timeout = timeout;
             }
 
             const PROTOCOL = normalizeString(REQUEST_URL.protocol);
