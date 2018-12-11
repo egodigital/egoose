@@ -124,7 +124,7 @@ export interface HttpResponse {
     /**
      * The response context.
      */
-    response: HTTP.ClientResponse;
+    response: any;
     /**
      * The status message.
      */
