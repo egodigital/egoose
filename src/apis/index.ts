@@ -15,11 +15,12 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-import { asArray, cloneObj, normalizeString, toBooleanSafe, toStringSafe } from '../index';
+import { asArray, cloneObj, getAppVersionSync, normalizeString, toBooleanSafe, toStringSafe } from '../index';
 import { getCpuUsage, getDiskSpace } from '../system';
 import * as _ from 'lodash';
 import { Response } from 'express';
 import { readFile, readFileSync } from 'fs-extra';
+import * as moment from 'moment';
 import * as os from 'os';
 import * as Path from 'path';
 
@@ -73,9 +74,17 @@ export interface ApiResult {
  */
 export interface CreateMonitoringApiResultOptions {
     /**
+     * The custom working directory.
+     */
+    cwd?: string;
+    /**
      * An optional function, which checks a database connection.
      */
     databaseConnectionChecker?: () => boolean | PromiseLike<boolean>;
+    /**
+     * Also return version information about the app.
+     */
+    withAppVersion?: boolean;
 }
 
 /**
@@ -115,6 +124,24 @@ export interface MonitoringApiResult {
      * The ram in use, in bytes.
      */
     ram_used: number;
+    /**
+     * Information about the version of the app.
+     */
+    version?: MonitoringApiAppVersion;
+}
+
+/**
+ * Stores version information about the app for a monitoring API result.
+ */
+export interface MonitoringApiAppVersion {
+    /**
+     * The last commit date. Contains (false), if failed.
+     */
+    date?: string | false;
+    /**
+     * The last commit hash. Contains (false), if failed.
+     */
+    hash?: string | false;
 }
 
 /**
@@ -227,6 +254,19 @@ export async function createMonitoringApiResult(
         }
     }
 
+    let version: MonitoringApiAppVersion;
+    if (toBooleanSafe(opts.withAppVersion, true)) {
+        const APP_VERSION = getAppVersionSync({
+            cwd: opts.cwd,
+        });
+
+        version = {
+            date: !APP_VERSION.date ? <any>APP_VERSION.date
+                : (<moment.Moment>APP_VERSION.date).toISOString(),
+            hash: APP_VERSION.hash,
+        };
+    }
+
     return {
         cpu_load: cpu_load,
         database_connected: database_connected,
@@ -234,6 +274,7 @@ export async function createMonitoringApiResult(
         disk_space_used: disk_space_used,
         ram: ram,
         ram_used: ram_used,
+        version: version,
     };
 }
 

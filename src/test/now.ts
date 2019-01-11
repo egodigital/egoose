@@ -17,7 +17,7 @@
 
 import * as assert from 'assert';
 import { describe, it } from 'mocha';
-import  * as egoose from '../index'
+import  * as egoose from '../index';
 import  * as moment from 'moment';
 
 describe('#now(tz)', function() {

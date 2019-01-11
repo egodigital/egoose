@@ -1,6 +1,13 @@
 # Change Log (@egodigital/egoose)
 
-## 3.5.0
+## 3.6.0
+
+* added `asLocal()`, `asMoment()`, `asUTC()`, `getAppVersionSync()` functions
+* `createMonitoringApiResult()` now also returns the app version information from `getAppVersionSync()` now
+* updated to `fast-glob@2.2.6`
+* updated to `moment@2.23.0`
+
+## 3.5.1
 
 * added `timeout` property to `HttpRequestOptions` interface
 * added `readBody`, `readJSON` and `readString` method to `HttpResponse` interface

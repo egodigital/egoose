@@ -15,11 +15,27 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
+import { execSync } from 'child_process';
 import * as _ from 'lodash';
 import * as Enumerable from 'node-enumerable';
+import * as path from 'path';
 import * as moment from 'moment-timezone';
 import * as UUID from 'uuid';
 import * as UUID_v5 from 'uuid/v5';
+
+/**
+ * Stores version information about the app.
+ */
+export interface AppVersion {
+    /**
+     * The last commit date. Contains (false), if failed.
+     */
+    date?: moment.Moment | false;
+    /**
+     * The last commit hash. Contains (false), if failed.
+     */
+    hash?: string | false;
+}
 
 /**
  * Describes a simple 'completed' action.
@@ -36,6 +52,16 @@ export type CompletedAction<TResult> = (err: any, result?: TResult) => void;
  * @param {number} index The zero-based index.
  */
 export type ForEachAsyncAction<T> = (item: T, index: number) => void | Promise<void>;
+
+/**
+ * Options for 'getAppVersion()' function(s).
+ */
+export interface GetAppVersionOptions {
+    /**
+     * The custom working directory.
+     */
+    cwd?: string;
+}
 
 /**
  * Applies an object or value to a function.
@@ -73,6 +99,82 @@ export function asArray<T>(val: T | T[], noEmpty = true): T[] {
 
         return true;
     });
+}
+
+/**
+ * Keeps sure that a value is a Moment instance (local timezone).
+ *
+ * @param {any} time The input value.
+ *
+ * @return {moment.Moment} The Moment instance.
+ */
+export function asLocal(time: any): moment.Moment {
+    let result = asMoment(time);
+
+    if (!_.isNil(result)) {
+        if (result.isValid()) {
+            if (!result.isLocal()) {
+                result = result.local();
+            }
+        }
+    }
+
+    return result;
+}
+
+/**
+ * Keeps sure that a value is a Moment instance.
+ *
+ * @param {any} val The input value.
+ *
+ * @return {moment.Moment} The Moment instance.
+ */
+export function asMoment(val: any): moment.Moment {
+    if (_.isNil(val)) {
+        return <any>val;
+    }
+
+    let result: moment.Moment;
+
+    if (moment.isMoment(val)) {
+        result = val;
+    } else if (moment.isDate(val)) {
+        result = moment(val);
+    } else {
+        let unix = parseInt(
+            toStringSafe(val).trim()
+        );
+        if (isNaN(unix)) {
+            result = moment(
+                toStringSafe(val)
+            );
+        } else {
+            result = moment(unix);
+        }
+    }
+
+    return result;
+}
+
+/**
+ * Keeps sure that a value is a Moment instance (UTC timezone).
+ *
+ * @param {any} time The input value.
+ *
+ * @return {moment.Moment} The Moment instance.
+ */
+export function asUTC(time: any): moment.Moment {
+    let result = asMoment(time);
+
+    if (!_.isNil(result)) {
+        if (result.isValid()) {
+            if (!result.isUTC()) {
+                result = result.utc();
+            }
+        }
+    }
+
+    return result;
 }
 
 /**
@@ -179,6 +281,58 @@ export async function forEachAsync<T>(
             action(ITEM, i)
         );
     }
+}
+
+/**
+ * Detects version information about the current app via Git (synchronous).
+ *
+ * @param {GetAppVersionOptions} [opts] Custom options.
+ *
+ * @return {AppVersion} Version information.
+ */
+export function getAppVersionSync(opts?: GetAppVersionOptions): AppVersion {
+    if (!opts) {
+        opts = <any>{};
+    }
+
+    // working directory
+    let cwd = toStringSafe(opts.cwd);
+    if (isEmptyString(cwd)) {
+        cwd = process.cwd();
+    }
+    if (!path.isAbsolute(cwd)) {
+        cwd = path.join(
+            process.cwd(), cwd
+        );
+    }
+    cwd = path.resolve(cwd);
+
+    const VERSION: AppVersion = {};
+
+    try {
+        VERSION.date = asUTC(
+            moment(
+                execSync('git log -n1 --pretty=%cI HEAD', {
+                    cwd: cwd,
+                }).toString('utf8')
+                  .trim()
+            )
+        );
+    } catch {
+        VERSION.date = false;
+    }
+
+    try {
+        VERSION.hash = normalizeString(
+            execSync('git log --pretty="%H" -n1 HEAD', {
+                cwd: cwd,
+            }).toString('utf8')
+        );
+    } catch {
+        VERSION.hash = false;
+    }
+
+    return VERSION;
 }
 
 /**

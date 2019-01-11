@@ -21,10 +21,32 @@ import { createMonitoringApiResult } from '../apis/index';
 
 describe('#createMonitoringApiResult()', async function() {
     describe('Object', async function() {
-        it('should return an object', async function() {
+        it('with app information (default)', async function() {
             const OBJ = await createMonitoringApiResult();
 
             assert.ok(typeof OBJ === 'object');
+
+            assert.ok(typeof OBJ.version === 'object');
+        });
+
+        it('with app information (explicit)', async function() {
+            const OBJ = await createMonitoringApiResult({
+                withAppVersion: true,
+            });
+
+            assert.ok(typeof OBJ === 'object');
+
+            assert.ok(typeof OBJ.version === 'object');
+        });
+
+        it('without app information', async function() {
+            const OBJ = await createMonitoringApiResult({
+                withAppVersion: false,
+            });
+
+            assert.ok(typeof OBJ === 'object');
+
+            assert.ok(typeof OBJ.version === 'undefined');
         });
     });
 });

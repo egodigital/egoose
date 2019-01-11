@@ -1,6 +1,6 @@
 {
   "name": "@egodigital/egoose",
-  "version": "3.5.1",
+  "version": "3.6.0",
   "description": "Helper classes and functions for Node.js 8 or later.",
   "main": "lib/index.js",
   "private": false,
@@ -53,9 +53,9 @@
     "@types/mime-types": "^2.1.0",
     "@types/mocha": "^5.2.5",
     "@types/moment": "^2.13.0",
-    "@types/moment-timezone": "^0.5.9",
+    "@types/moment-timezone": "^0.5.10",
     "@types/mongoose": "5.2.17",
-    "@types/node": "^8.10.38",
+    "@types/node": "^8.10.39",
     "@types/sanitize-filename": "^1.1.28",
     "@types/tmp": "0.0.33",
     "@types/uuid": "^3.4.3",
@@ -65,7 +65,7 @@
     "diskspace": "^2.0.0",
     "errorhandler": "^1.5.0",
     "express": "^4.16.4",
-    "fast-glob": "^2.2.4",
+    "fast-glob": "^2.2.6",
     "fs-extra": "^7.0.1",
     "geodist": "^0.2.1",
     "header-case-normalizer": "^1.0.3",
@@ -74,7 +74,7 @@
     "merge-deep": "^3.0.2",
     "mime-types": "^2.1.21",
     "mocha": "^5.2.0",
-    "moment": "^2.22.2",
+    "moment": "^2.23.0",
     "moment-timezone": "^0.5.23",
     "mongoose": "5.2.17",
     "node-enumerable": "^3.9.0",
@@ -85,7 +85,7 @@
   },
   "devDependencies": {
     "gh-pages": "^2.0.1",
-    "tslint": "^5.11.0",
+    "tslint": "^5.12.1",
     "typedoc": "^0.11.1",
     "typescript": "^2.9.2"
   }
