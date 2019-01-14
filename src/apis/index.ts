@@ -240,11 +240,11 @@ export async function createMonitoringApiResult(
     let ram_used: number;
     if (USE_MEM_AVAILABLE) {
         try {
-            const RESULT = await exec('cat /proc/meminfo | grep MemAvailable | cut -f2 -d : | xargs');
+            const MEMINFO_RESULT = await exec('cat /proc/meminfo | grep MemAvailable | cut -f2 -d : | xargs');
 
             ram_used = parseInt(
-                RESULT.stdout.substr(
-                    0, RESULT.stdout.indexOf(' ')
+                MEMINFO_RESULT.stdout.substr(
+                    0, MEMINFO_RESULT.stdout.indexOf(' ')
                 ).trim()
             ) * 1024;
         } catch { }
