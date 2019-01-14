@@ -238,11 +238,12 @@ export async function createMonitoringApiResult(
 
     let ram: number;
     let ram_used: number;
+    let ram_free: number;
     if (USE_MEM_AVAILABLE) {
         try {
             const MEMINFO_RESULT = await exec('cat /proc/meminfo | grep MemAvailable | cut -f2 -d : | xargs');
 
-            ram_used = parseInt(
+            ram_free = parseInt(
                 MEMINFO_RESULT.stdout.substr(
                     0, MEMINFO_RESULT.stdout.indexOf(' ')
                 ).trim()
@@ -258,13 +259,15 @@ export async function createMonitoringApiResult(
             );
         }
 
-        if (isNaN(ram_used)) {
-            ram_used = ram - parseInt(
+        if (isNaN(ram_free)) {
+            ram_free = parseInt(
                 toStringSafe(
                     os.freemem()
                 ).trim()
             );
         }
+
+        ram_used = ram - ram_free;
     } catch { } finally {
         if (isNaN(ram)) {
             ram = -1;
