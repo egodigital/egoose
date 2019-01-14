@@ -15,7 +15,7 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-import { execSync } from 'child_process';
+import { exec as execChildProcess, execSync } from 'child_process';
 import * as _ from 'lodash';
 import * as Enumerable from 'node-enumerable';
 import * as path from 'path';
@@ -44,6 +44,20 @@ export interface AppVersion {
  * @param {TResult} [result] The result.
  */
 export type CompletedAction<TResult> = (err: any, result?: TResult) => void;
+
+/**
+ * Result of 'exec()' function.
+ */
+export interface ExecResult {
+    /**
+     * The error stream.
+     */
+    stderr: string;
+    /**
+     * The standard stream.
+     */
+    stdout: string;
+}
 
 /**
  * An action for an async 'forEach'.
@@ -261,6 +275,34 @@ export function createCompletedAction<TResult = any>(resolve: (value?: TResult |
             }
         }
     };
+}
+
+/**
+ * Promise version of `child_process.exec()` function.
+ *
+ * @param {string} command The command to execute.
+ *
+ * @return {Promise<ExecResult>} The promise with the result.
+ */
+export async function exec(command: string): Promise<ExecResult> {
+    command = toStringSafe(command);
+
+    return new Promise<ExecResult>((resolve, reject) => {
+        try {
+            execChildProcess(command, (err, stdout, stderr) => {
+                if (err) {
+                    reject(err);
+                } else {
+                    resolve({
+                        stderr: stderr,
+                        stdout: stdout,
+                    });
+                }
+            });
+        } catch (e) {
+            reject(e);
+        }
+    });
 }
 
 /**

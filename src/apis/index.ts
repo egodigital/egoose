@@ -15,7 +15,7 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-import { asArray, cloneObj, getAppVersionSync, normalizeString, toBooleanSafe, toStringSafe } from '../index';
+import { asArray, cloneObj, exec, getAppVersionSync, normalizeString, toBooleanSafe, toStringSafe } from '../index';
 import { getCpuUsage, getDiskSpace } from '../system';
 import * as _ from 'lodash';
 import { Response } from 'express';
@@ -81,6 +81,10 @@ export interface CreateMonitoringApiResultOptions {
      * An optional function, which checks a database connection.
      */
     databaseConnectionChecker?: () => boolean | PromiseLike<boolean>;
+    /**
+     * Use 'MemAvailable' from 'meminfo' for detecting free ram.
+     */
+    useMemAvailable?: boolean;
     /**
      * Also return version information about the app.
      */
@@ -190,6 +194,8 @@ export async function createMonitoringApiResult(
         opts = <any>{};
     }
 
+    const USE_MEM_AVAILABLE = toBooleanSafe(opts.useMemAvailable);
+
     let cpu_load: number;
     try {
         cpu_load = await getCpuUsage();
@@ -232,18 +238,33 @@ export async function createMonitoringApiResult(
 
     let ram: number;
     let ram_used: number;
-    try {
-        ram = parseInt(
-            toStringSafe(
-                os.totalmem()
-            ).trim()
-        );
+    if (USE_MEM_AVAILABLE) {
+        try {
+            const RESULT = await exec('cat /proc/meminfo | grep MemAvailable | cut -f2 -d : | xargs');
 
-        ram_used = ram - parseInt(
-            toStringSafe(
-                os.freemem()
-            ).trim()
-        );
+            ram_used = parseInt(
+                RESULT.stdout.substr(
+                    0, RESULT.stdout.indexOf(' ')
+                ).trim()
+            ) * 1024;
+        } catch { }
+    }
+    try {
+        if (isNaN(ram)) {
+            ram = parseInt(
+                toStringSafe(
+                    os.totalmem()
+                ).trim()
+            );
+        }
+
+        if (isNaN(ram_used)) {
+            ram_used = ram - parseInt(
+                toStringSafe(
+                    os.freemem()
+                ).trim()
+            );
+        }
     } catch { } finally {
         if (isNaN(ram)) {
             ram = -1;

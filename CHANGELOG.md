@@ -1,5 +1,10 @@
 # Change Log (@egodigital/egoose)
 
+## 3.7.0
+
+* added `exec()` function
+* added `useMemAvailable` property to [CreateMonitoringApiResultOptions interface](https://egodigital.github.io/egoose/interfaces/_apis_index_.createmonitoringapiresultoptions.html)
+
 ## 3.6.0
 
 * added `asLocal()`, `asMoment()`, `asUTC()`, `getAppVersionSync()` functions
