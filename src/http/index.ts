@@ -20,7 +20,7 @@ import { readAll } from '../streams';
 const NormalizeHeaderCase = require("header-case-normalizer");
 import * as HTTP from 'http';
 import * as HTTPs from 'https';
-import { normalizeString, toStringSafe } from '../index';
+import { isEmptyString, normalizeString, toStringSafe } from '../index';
 import * as IsStream from 'is-stream';
 import { Readable, Writable } from 'stream';
 import * as url from 'url';
@@ -50,6 +50,10 @@ export interface HttpRequestOptions {
      * The custom headers to send.
      */
     headers?: any;
+    /**
+     * The path to the (UNIX) socket.
+     */
+    socket?: string;
     /**
      * Custom request timeout.
      */
@@ -338,6 +342,12 @@ export function request(method: string, u: HttpRequestUrl, opts?: HttpRequestOpt
             if (!isNaN(timeout)) {
                 REQUEST_OPTS.timeout = timeout;
             }
+
+            let socket: string = toStringSafe(opts.socket);
+            if (isEmptyString(socket)) {
+                socket = undefined;
+            }
+            REQUEST_OPTS.socketPath = socket;
 
             const PROTOCOL = normalizeString(REQUEST_URL.protocol);
             switch (PROTOCOL) {
