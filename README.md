@@ -1,3 +1,5 @@
+[![npm](https://img.shields.io/npm/v/@egodigital/egoose.svg)](https://www.npmjs.com/package/@egodigital/egoose)
+
 # egoose
 
 Helper classes and functions for [Node.js 8+](https://nodejs.org/) written in [TypeScript](https://www.typescriptlang.org/).

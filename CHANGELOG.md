@@ -1,6 +1,6 @@
 # Change Log (@egodigital/egoose)
 
-## 4.0.0
+## 4.0.1
 
 * updated to `moment@2.24.0`
 * updated to `node-enumerable@4.0.2`
