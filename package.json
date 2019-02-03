@@ -1,6 +1,6 @@
 {
   "name": "@egodigital/egoose",
-  "version": "3.8.0",
+  "version": "4.0.0",
   "description": "Helper classes and functions for Node.js 8 or later.",
   "main": "lib/index.js",
   "private": false,
@@ -46,7 +46,7 @@
     "@types/body-parser": "^1.17.0",
     "@types/chai": "^4.1.7",
     "@types/errorhandler": "0.0.32",
-    "@types/express": "^4.16.0",
+    "@types/express": "^4.16.1",
     "@types/fs-extra": "^5.0.4",
     "@types/is-stream": "^1.1.0",
     "@types/lodash": "^4.14.120",
@@ -74,10 +74,10 @@
     "merge-deep": "^3.0.2",
     "mime-types": "^2.1.21",
     "mocha": "^5.2.0",
-    "moment": "^2.23.0",
+    "moment": "^2.24.0",
     "moment-timezone": "^0.5.23",
     "mongoose": "5.2.17",
-    "node-enumerable": "^3.9.0",
+    "node-enumerable": "^4.0.2",
     "os-utils": "0.0.14",
     "sanitize-filename": "^1.6.1",
     "tmp": "0.0.33",
@@ -87,6 +87,6 @@
     "gh-pages": "^2.0.1",
     "tslint": "^5.12.1",
     "typedoc": "^0.11.1",
-    "typescript": "^2.9.2"
+    "typescript": "^3.3.1"
   }
 }

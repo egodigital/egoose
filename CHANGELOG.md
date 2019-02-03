@@ -1,5 +1,11 @@
 # Change Log (@egodigital/egoose)
 
+## 4.0.0
+
+* updated to `moment@2.24.0`
+* updated to `node-enumerable@4.0.2`
+* updated to `typescript@3.3.1`
+
 ## 3.8.0
 
 * added `socket` property to `HttpRequestOptions` interface
