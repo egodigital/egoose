@@ -19,13 +19,14 @@ import * as _ from 'lodash';
 import * as bodyParser from 'body-parser';
 import * as errorHandler from 'errorhandler';
 import { MongoDatabase, MongoDatabaseOptions } from '../mongo/index';
-import { Logger } from '../diagnostics/logger';
+import { Logger, LogType } from '../diagnostics/logger';
 import * as express from 'express';
 import * as http from 'http';
 import * as https from 'https';
 import * as MergeDeep from 'merge-deep';
 import { IS_LOCAL_DEV } from '../dev';
-import { normalizeString, toStringSafe } from '../index';
+import { guid, normalizeString, toStringSafe, utc } from '../index';
+import * as util from 'util';
 
 /**
  * An API authorizer.
@@ -512,6 +513,32 @@ export class MongoApiHost<
     }
 
     /**
+     * Log something into the database.
+     * This requires a 'logs' collection, described by 'LogsDocument' interface.
+     *
+     * @param {any} message The message.
+     * @param {LogType} type The type.
+     * @param {any} [payload] The (optional) payload.
+     */
+    public async log(message: any, type: LogType, payload?: any) {
+        const NOW = utc();
+
+        try {
+            await this.withDatabase(async (db) => {
+                await db.model('Logs').insertMany([{
+                    created: NOW.toDate(),
+                    message: toSerializableLogValue(message),
+                    payload: toSerializableLogValue(payload),
+                    type: type,
+                    uuid: guid(),
+                }]);
+            });
+        } catch (error) {
+            console.log('logging failed', error);
+        }
+    }
+
+    /**
      * Options a new connection to a database.
      *
      * @param {TOptions} [opts] The custom options to use.
@@ -564,4 +591,32 @@ export class MongoApiHost<
             await DB.disconnect();
         }
     }
+}
+
+function toSerializableLogValue(value: any): string {
+    if (_.isNil(value)) {
+        value = null;
+    } else {
+        if (Array.isArray(value) || _.isObjectLike(value)) {
+            try {
+                value = util.inspect(value, {
+                    depth: null,
+                    maxArrayLength: 512,
+                    showHidden: false,
+                });
+            } catch (e) {
+                value = toStringSafe(value)
+                    .trim();
+            }
+        } else if (value instanceof Error) {
+            value = `(ERR::${ value.name }) '${ value.message }'
+
+${ value.stack }`;
+        } else {
+            value = toStringSafe(value)
+                .trim();
+        }
+    }
+
+    return value;
 }

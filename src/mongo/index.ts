@@ -16,9 +16,39 @@
  */
 
 import * as _ from 'lodash';
-import { isEmptyString, toStringSafe } from '../index';
+import { isEmptyString, toStringSafe, uuid } from '../index';
 import * as MergeDeep from 'merge-deep';
 import * as mongoose from 'mongoose';
+
+/**
+ * A suggestion for a mongo log document.
+ */
+export interface LogsDocument extends mongoose.Document {
+    /**
+     * The time, the entry has been created.
+     */
+    created: Date;
+    /**
+     * The message.
+     */
+    message: string;
+    /**
+     * The optional payload.
+     */
+    payload?: string;
+    /**
+     * The type.
+     */
+    type: number;
+    /**
+     * The time, the entry has been updated.
+     */
+    updated?: Date;
+    /**
+     * The UUID of the entry.
+     */
+    uuid: string;
+}
 
 /**
  * Options for connecting to a database.
@@ -190,6 +220,33 @@ export class MongoDatabase {
     public schema(name: string): mongoose.Schema {
         return MONGO_SCHEMAS[name];
     }
+}
+
+/**
+ * Initializes the schema for a 'logs' collection.
+ */
+export function initLogsSchema() {
+    MONGO_SCHEMAS['Logs'] = new mongoose.Schema({
+        message: String,
+        payload: {
+            required: false,
+        },
+        type: Number,
+        uuid: {
+            type: String,
+            default: () => {
+                return uuid();
+            },
+            unique: true,
+        },
+    },
+    {
+        timestamps: {
+            createdAt: 'created',
+            updatedAt: 'updated',
+        }
+    });
+    MONGO_SCHEMAS['Logs'].index({ type: 1 });
 }
 
 /**

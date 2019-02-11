@@ -1,5 +1,10 @@
 # Change Log (@egodigital/egoose)
 
+## 4.2.0
+
+* added `log()` method to [MongoApiHost](https://egodigital.github.io/egoose/classes/_apis_host_.mongoapihost.html) class
+* added `initLogsSchema()` for mongo databases
+
 ## 4.1.0
 
 * `new Buffer` => `Buffer.from`
