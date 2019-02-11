@@ -400,7 +400,7 @@ export function request(method: string, u: HttpRequestUrl, opts?: HttpRequestOpt
                 } else if (Buffer.isBuffer(body)) {
                     request.write(body);
                 } else {
-                    request.write(new Buffer(toStringSafe(body), enc));
+                    request.write(Buffer.from(toStringSafe(body), enc));
                 }
             }
 

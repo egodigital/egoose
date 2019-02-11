@@ -274,7 +274,7 @@ export class AzureStorageClient {
                     } else if (isStream.readable(data)) {
                         dataToStore = await readAll(data);
                     } else {
-                        dataToStore = new Buffer(
+                        dataToStore = Buffer.from(
                             toStringSafe(data), 'utf8'
                         );
                     }

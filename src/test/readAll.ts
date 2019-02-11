@@ -26,7 +26,7 @@ describe('#readAll()', async function() {
             for (let i = 0; i < 1000; i++) {
                 const IN_STR = (new Array(i)).map(x => 'TMäöüMK')
                     .join('');
-                const IN_BUFF = new Buffer(IN_STR, 'utf8');
+                const IN_BUFF = Buffer.from(IN_STR, 'utf8');
 
                 const IN_STREAM = new stream.PassThrough();
                 IN_STREAM.end(IN_BUFF);

@@ -1,5 +1,9 @@
 # Change Log (@egodigital/egoose)
 
+## 4.1.0
+
+* `new Buffer` => `Buffer.from`
+
 ## 4.0.1
 
 * updated to `moment@2.24.0`

@@ -72,7 +72,7 @@ export function readAll(stream: Stream.Readable, enc?: string): Promise<Buffer> 
                 }
 
                 if (_.isString(chunk)) {
-                    chunk = new Buffer(chunk, enc);
+                    chunk = Buffer.from(chunk, enc);
                 }
 
                 buff = Buffer.concat([ buff, chunk ]);

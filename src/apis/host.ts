@@ -309,7 +309,7 @@ ${ str}`;
                 const USERNAME_AND_PASSWORD = toStringSafe(token).trim();
                 if ('' !== USERNAME_AND_PASSWORD) {
                     const UNAME_PWD = (
-                        new Buffer(USERNAME_AND_PASSWORD, 'base64')
+                        Buffer.from(USERNAME_AND_PASSWORD, 'base64')
                     ).toString('utf8');
 
                     const USER_PWD_SEP = UNAME_PWD.indexOf(':');
