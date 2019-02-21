@@ -1,5 +1,10 @@
 # Change Log (@egodigital/egoose)
 
+## 4.3.0
+
+* `blobContainerProvider` property of [AzureStorageClientOptions interface](https://egodigital.github.io/egoose/interfaces/_azure_storage_.azurestorageclientoptions.html) can also handle strings now
+* updated to `mime-types@2.1.22`
+
 ## 4.2.0
 
 * added `log()` method to [MongoApiHost](https://egodigital.github.io/egoose/classes/_apis_host_.mongoapihost.html) class

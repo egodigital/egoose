@@ -35,9 +35,9 @@ export interface AzureStorageClientOptions {
      * A custom function that provides the name of the underlying container.
      * If not defined, 'AZURE_STORAGE_CONTAINER' environment variable is used.
      *
-     * @return {string|Promise<string>} The result with the container name.
+     * @return {string|Function} The result with the container name or the comtainer name as string.
      */
-    blobContainerProvider?: () => string | Promise<string>;
+    blobContainerProvider?: string | (() => string | Promise<string>);
 
     /**
      * A custom function, which detects a MIME type by a blob name / path,
@@ -164,6 +164,14 @@ export class AzureStorageClient {
             containerProvider = () => process.env
                 .AZURE_STORAGE_CONTAINER
                 .trim();
+        } else {
+            if (!_.isFunction(containerProvider)) {
+                const CONTAINER_PROVIDER = toStringSafe(containerProvider);
+
+                containerProvider = () => {
+                    return CONTAINER_PROVIDER;
+                };
+            }
         }
 
         return Promise.resolve(
