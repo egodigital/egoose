@@ -32,10 +32,10 @@ import { tempFile } from '../fs';
  */
 export interface AzureStorageClientOptions {
     /**
-     * A custom function that provides the name of the underlying container.
+     * A custom function or string that provides the name of the underlying container.
      * If not defined, 'AZURE_STORAGE_CONTAINER' environment variable is used.
      *
-     * @return {string|Function} The result with the container name or the comtainer name as string.
+     * @return {string|Function} The result with the container name or the container name as string.
      */
     blobContainerProvider?: string | (() => string | Promise<string>);
 

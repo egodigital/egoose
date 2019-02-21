@@ -1,6 +1,6 @@
 # Change Log (@egodigital/egoose)
 
-## 4.3.0
+## 4.3.1
 
 * `blobContainerProvider` property of [AzureStorageClientOptions interface](https://egodigital.github.io/egoose/interfaces/_azure_storage_.azurestorageclientoptions.html) can also handle strings now
 * updated to `mime-types@2.1.22`
