@@ -43,6 +43,7 @@
   },
   "homepage": "https://github.com/egodigital/egoose#readme",
   "dependencies": {
+    "@mapbox/polyline": "^1.0.0",
     "@types/body-parser": "^1.17.0",
     "@types/chai": "^4.1.7",
     "@types/errorhandler": "0.0.32",
@@ -78,6 +79,7 @@
     "moment-timezone": "^0.5.23",
     "mongoose": "5.2.17",
     "node-enumerable": "^4.0.2",
+    "node-ews": "^3.2.4",
     "os-utils": "0.0.14",
     "sanitize-filename": "^1.6.1",
     "tmp": "0.0.33",
@@ -87,6 +89,6 @@
     "gh-pages": "^2.0.1",
     "tslint": "^5.12.1",
     "typedoc": "^0.11.1",
-    "typescript": "^3.3.3"
+    "typescript": "^3.3.3333"
   }
 }

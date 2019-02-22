@@ -17,9 +17,11 @@
 
 import { exec as execChildProcess, execSync } from 'child_process';
 import * as _ from 'lodash';
+import * as crypto from 'crypto';
 import * as Enumerable from 'node-enumerable';
 import * as path from 'path';
 import * as moment from 'moment-timezone';
+import * as util from 'util';
 import * as UUID from 'uuid';
 import * as UUID_v5 from 'uuid/v5';
 
@@ -424,6 +426,49 @@ export function now(timezone?: string): moment.Moment {
 }
 
 /**
+ * Generates a random string.
+ *
+ * @param {number} size The size of the result string.
+ * @param {string} [chars] The custom list of characters.
+ *
+ * @return {Promise<string>} The promise with the random string.
+ */
+export async function randChars(size: number, chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789'): Promise<string> {
+    return randCharsInner(
+        await util.promisify(crypto.randomBytes)(size),
+        chars,
+    );
+}
+
+function randCharsInner(randBlob: Buffer, chars: string) {
+    chars = toStringSafe(chars);
+
+    let str = '';
+    for (let i = 0; i < randBlob.length; i++) {
+        str += chars.substr(
+            randBlob.readInt8(i) % chars.length, 1
+        );
+    }
+
+    return str;
+}
+
+/**
+ * Generates a random string.
+ *
+ * @param {number} size The size of the result string.
+ * @param {string} [chars] The custom list of characters.
+ *
+ * @return {string} The random string.
+ */
+export function randCharsSync(size: number, chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789'): string {
+    return randCharsInner(
+        crypto.randomBytes(size),
+        chars,
+    );
+}
+
+/**
  * Returns a value as "real" boolean.
  *
  * @param {any} val The input value.
@@ -524,6 +569,7 @@ export * from './events';
 export * from './fs';
 export * from './geo';
 export * from './http';
+export * from './mail';
 export * from './mongo';
 export * from './streams';
 export * from './system';

@@ -1,5 +1,11 @@
 # Change Log (@egodigital/egoose)
 
+## 4.4.0
+
+* added `calcRoute()` function
+* added `randChars()` and `randCharsSync()` functions
+* added `sendMail()` function
+
 ## 4.3.1
 
 * `blobContainerProvider` property of [AzureStorageClientOptions interface](https://egodigital.github.io/egoose/interfaces/_azure_storage_.azurestorageclientoptions.html) can also handle strings now
