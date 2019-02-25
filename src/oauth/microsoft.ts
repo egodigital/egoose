@@ -82,8 +82,15 @@ export interface MicrosoftOAuthAccessToken {
 export interface RegisterForMicrosoftOAuthOptions {
     /**
      * Is invoked, when an access token has been received.
+     *
+     * @param {MicrosoftOAuthAccessToken} token The token.
+     * @param {express.Request} req The request context.
+     * @param {express.Response} res The response context.
      */
-    onAccessToken: (token: MicrosoftOAuthAccessToken) => void | PromiseLike<void>;
+    onAccessToken: (
+        token: MicrosoftOAuthAccessToken,
+        req: express.Request, res: express.Response
+    ) => void | PromiseLike<void>;
     /**
      * A custom error response function.
      *
@@ -256,7 +263,10 @@ export function registerForMicrosoftOAuth(
                     );
                     if (TOKEN) {
                         await Promise.resolve(
-                            opts.onAccessToken(TOKEN)
+                            opts.onAccessToken(
+                                TOKEN,
+                                req, res
+                            )
                         );
 
                         let onSuccess = opts.onSuccess;

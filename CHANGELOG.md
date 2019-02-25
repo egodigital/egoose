@@ -1,6 +1,6 @@
 # Change Log (@egodigital/egoose)
 
-## 4.5.0
+## 4.6.0
 
 * added `registerForMicrosoftOAuth()` function, which registers an [Express](https://expressjs.com/) middleware to handle Microsoft OAuth requests
 * added `getMicrosoftMe()` function, which returns information about the currently logged in user
