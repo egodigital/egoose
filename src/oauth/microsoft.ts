@@ -66,6 +66,17 @@ export interface RegisterForMicrosoftOAuthOptions {
         req: express.Request, res: express.Response
     ) => any;
     /**
+     * A custom server error response function.
+     *
+     * @param {any} err The error.
+     * @param {express.Request} req The request context.
+     * @param {express.Response} res The response context.
+     */
+    onServerError?: (
+        err: any,
+        req: express.Request, res: express.Response
+    ) => any;
+    /**
      * A custom success response function.
      *
      * @param {express.Request} req The request context.
@@ -117,9 +128,6 @@ export function registerForMicrosoftOAuth(
     if ('' === path) {
         path = '/oauth/microsoft';
     }
-
-    // TODO: handle errors
-    //       GET http://localhost:12345/?error=access_denied&error_description=the+user+canceled+the+authentication
 
     hostOrRouter.get(path, async function(req, res, next) {
         try {
@@ -213,9 +221,21 @@ export function registerForMicrosoftOAuth(
 
             return res.status(400)
                 .send();
-        } catch {
-            return res.status(500)
-                .send();
+        } catch (e) {
+            let onServerError = opts.onServerError;
+            if (!onServerError) {
+                onServerError = (err, req2, res2) => {
+                    return res2.status(500)
+                        .send();
+                };
+            }
+
+            return await Promise.resolve(
+                onServerError(
+                    e,
+                    req, res
+                )
+            );
         }
     });
 }
