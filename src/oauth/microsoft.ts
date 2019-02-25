@@ -115,9 +115,9 @@ export interface RegisterForMicrosoftOAuthOptions {
      */
     onSuccess?: (req: express.Request, res: express.Response) => any;
     /**
-     * The custom base path.
+     * The custom redirect (base) path. Default: '/oauth/microsoft'
      */
-    path?: string;
+    redirectPath?: string;
 }
 
 /**
@@ -194,13 +194,13 @@ export function registerForMicrosoftOAuth(
     hostOrRouter: express.Express | express.Router,
     opts: RegisterForMicrosoftOAuthOptions,
 ) {
-    let path = toStringSafe(opts.path)
+    let redirectPath = toStringSafe(opts.redirectPath)
         .trim();
-    if ('' === path) {
-        path = '/oauth/microsoft';
+    if ('' === redirectPath) {
+        redirectPath = '/oauth/microsoft';
     }
 
-    hostOrRouter.get(path, async function(req, res, next) {
+    hostOrRouter.get(redirectPath, async function(req, res, next) {
         try {
             const CODE = toStringSafe(req.query['code'])
                 .trim();
