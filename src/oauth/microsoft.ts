@@ -181,7 +181,11 @@ export function getMicrosoftOAuthLoginUrl(): string {
             process.env.MICROSOFT_OAUTH_REDIRECT_URL
                 .trim()
         )
-    }&response_mode=query`;
+    }&response_mode=query&resource=${
+        encodeURIComponent(
+            'https://graph.microsoft.com'
+        )
+    }`;
 }
 
 /**
@@ -227,6 +231,10 @@ export function registerForMicrosoftOAuth(
                         encodeURIComponent(
                             process.env.MICROSOFT_OAUTH_CLIENT_SECRET
                                 .trim()
+                        )
+                    }&scope=${
+                        encodeURIComponent(
+                            'https://graph.microsoft.com/user.read'
                         )
                     }`;
 
