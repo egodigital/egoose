@@ -2,7 +2,9 @@
 
 ## 4.5.0
 
-* added `registerForMicrosoftOAuth()`, which registers an [Express](https://expressjs.com/) middleware to handle Microsoft OAuth requests
+* added `registerForMicrosoftOAuth()` function, which registers an [Express](https://expressjs.com/) middleware to handle Microsoft OAuth requests
+* added `getMicrosoftMe()` function, which returns information about the currently logged in user
+* added `getMicrosoftOAuthLoginUrl()` function, which returns the login URL for the underlying tenant
 
 ## 4.4.0
 
