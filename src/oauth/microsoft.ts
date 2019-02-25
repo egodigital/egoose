@@ -255,7 +255,10 @@ export function registerForMicrosoftOAuth(
                             onSuccess = (req2, res2) => {
                                 return res2.status(200)
                                     .header('Content-type', 'text/plain; charset=utf-8')
-                                    .send('Authorization succeeded. You can close the browser now.');
+                                    .send(new Buffer(
+                                        'Authorization succeeded. You can close the browser now.',
+                                        'utf8'
+                                    ));
                             };
                         }
 
