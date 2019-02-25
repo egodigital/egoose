@@ -216,7 +216,7 @@ export function registerForMicrosoftOAuth(
                     )
                 }/oauth2/token`;
 
-                const BODY =
+                const BODY = Buffer.from(
                     `grant_type=authorization_code` +
                     `&client_id=${ encodeURIComponent(
                         process.env.MICROSOFT_OAUTH_CLIENT_ID
@@ -236,13 +236,14 @@ export function registerForMicrosoftOAuth(
                         encodeURIComponent(
                             'https://graph.microsoft.com/user.read'
                         )
-                    }`;
+                    }`, 'ascii');
 
                 const RESPONSE = await POST(
                     URL,
                     {
                         body: BODY,
                         headers: {
+                            'Content-Length': '' + BODY.length,
                             'Content-Type': 'application/x-www-form-urlencoded'
                         }
                     }
@@ -263,7 +264,7 @@ export function registerForMicrosoftOAuth(
                             onSuccess = (req2, res2) => {
                                 return res2.status(200)
                                     .header('Content-type', 'text/plain; charset=utf-8')
-                                    .send(new Buffer(
+                                    .send(Buffer.from(
                                         'Authorization succeeded. You can close the browser now.',
                                         'utf8'
                                     ));
