@@ -1,5 +1,9 @@
 # Change Log (@egodigital/egoose)
 
+## 4.5.0
+
+* added `registerForMicrosoftOAuth()`, which registers an [Express](https://expressjs.com/) middleware to handle Microsoft OAuth requests
+
 ## 4.4.0
 
 * added `calcRoute()` function

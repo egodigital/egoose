@@ -15,9 +15,40 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
+import * as _ from 'lodash';
 import * as express from 'express';
 import { toStringSafe } from '../index';
-import { POST } from '../http/index';
+import { GET, POST } from '../http/index';
+
+/**
+ * Data from 'https://graph.microsoft.com/v1.0/me'.
+ */
+export interface MicrosoftMe {
+    /**
+     * The display name.
+     */
+    "displayName"?: string;
+    /**
+     * The given name.
+     */
+    "givenName"?: string;
+    /**
+     * The ID.
+     */
+    "id": string;
+    /**
+     * The mail address.
+     */
+    "mail"?: string;
+    /**
+     * The surname.
+     */
+    "surname"?: string;
+    /**
+     * The user's principal name.
+     */
+    "userPrincipalName"?: string;
+}
 
 /**
  * Data for a Microsoft Access token.
@@ -27,10 +58,6 @@ export interface MicrosoftOAuthAccessToken {
      * The token.
      */
     "access_token": string;
-    /**
-     * The type, like "Bearer".
-     */
-    "token_type": string;
     /**
      * The time, in seconds, the token expires in.
      */
@@ -43,6 +70,10 @@ export interface MicrosoftOAuthAccessToken {
      * The scope.
      */
     "scope": string;
+    /**
+     * The type, like "Bearer".
+     */
+    "token_type": string;
 }
 
 /**
@@ -87,6 +118,46 @@ export interface RegisterForMicrosoftOAuthOptions {
      * The custom base path.
      */
     path?: string;
+}
+
+/**
+ * Returns the information from 'https://graph.microsoft.com/v1.0/me'.
+ *
+ * @param {string | MicrosoftOAuthAccessToken} token The token.
+ *
+ * @return {Promise<false|MicrosoftMe>} The promise with the data or (false) if failed.
+ */
+export async function getMicrosoftMe(
+    token: string | MicrosoftOAuthAccessToken
+): Promise<false | MicrosoftMe> {
+    let accessToken: string;
+    if (_.isObjectLike(token)) {
+        accessToken = (<MicrosoftOAuthAccessToken>token).access_token
+            .trim();
+    } else {
+        accessToken = toStringSafe(token)
+            .trim();
+    }
+
+    try {
+        const RESPONSE = await GET(
+            'https://graph.microsoft.com/v1.0/me',
+            {
+                headers: {
+                    'Authorization': `Bearer: ${ accessToken }`
+                }
+            }
+        );
+
+        if (200 === RESPONSE.code) {
+            return JSON.parse(
+                (await RESPONSE.readBody())
+                    .toString('utf8')
+            );
+        }
+    } catch { }
+
+    return false;
 }
 
 /**
