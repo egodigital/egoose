@@ -144,7 +144,7 @@ export async function getMicrosoftMe(
             'https://graph.microsoft.com/v1.0/me',
             {
                 headers: {
-                    'Authorization': `Bearer: ${ accessToken }`
+                    'Authorization': `Bearer ${ accessToken }`
                 }
             }
         );
