@@ -571,6 +571,7 @@ export * from './geo';
 export * from './http';
 export * from './mail';
 export * from './mongo';
+export * from './oauth/microsoft';
 export * from './streams';
 export * from './system';
 
