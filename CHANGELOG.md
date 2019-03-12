@@ -1,6 +1,6 @@
 # Change Log (@egodigital/egoose)
 
-## 4.7.0
+## 4.8.1
 
 * added `Stopwatch` class
 
