@@ -1,6 +1,6 @@
 {
   "name": "@egodigital/egoose",
-  "version": "4.7.0",
+  "version": "4.8.0",
   "description": "Helper classes and functions for Node.js 8 or later.",
   "main": "lib/index.js",
   "private": false,
@@ -10,7 +10,7 @@
   "scripts": {
     "build": "(rm -r ./lib || true) && (\"./node_modules/.bin/tsc\" && \"./node_modules/.bin/tsc\" -d)",
     "build_and_test": "npm run build && npm run test",
-    "deploy": "npm install && npm run build_and_test && npm publish",
+    "prepare:publish": "npm install && npm run build_and_test",
     "doc": "(rm -r ./doc || true) && (\"./node_modules/.bin/typedoc\" --out ./doc ./src)",
     "test": "./node_modules/.bin/mocha ./lib/test/**/*.js"
   },
@@ -50,13 +50,13 @@
     "@types/express": "^4.16.1",
     "@types/fs-extra": "^5.0.5",
     "@types/is-stream": "^1.1.0",
-    "@types/lodash": "^4.14.121",
+    "@types/lodash": "^4.14.123",
     "@types/mime-types": "^2.1.0",
     "@types/mocha": "^5.2.6",
     "@types/moment": "^2.13.0",
-    "@types/moment-timezone": "^0.5.10",
+    "@types/moment-timezone": "^0.5.12",
     "@types/mongoose": "5.2.17",
-    "@types/node": "^8.10.40",
+    "@types/node": "^8.10.43",
     "@types/sanitize-filename": "^1.1.28",
     "@types/tmp": "0.0.33",
     "@types/uuid": "^3.4.3",
@@ -87,7 +87,7 @@
   },
   "devDependencies": {
     "gh-pages": "^2.0.1",
-    "tslint": "^5.13.0",
+    "tslint": "^5.13.1",
     "typedoc": "^0.11.1",
     "typescript": "^3.3.3333"
   }

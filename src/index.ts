@@ -1,6 +1,6 @@
 /**
  * This file is part of the @egodigital/egoose distribution.
- * Copyright (c) e.GO Digital GmbH, Aachen, Germany (http://www.e-go-digital.com/)
+ * Copyright (c) e.GO Digital GmbH, Aachen, Germany (https://www.e-go-digital.com/)
  *
  * @egodigital/egoose is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as
@@ -565,6 +565,7 @@ export * from './apis/index';
 export * from './azure/storage';
 export * from './dev';
 export * from './diagnostics/logger';
+export * from './diagnostics/stopwatch';
 export * from './events';
 export * from './fs';
 export * from './geo';
