@@ -57,6 +57,31 @@ describe('#asArray()', function() {
                 });
             }
         });
+
+        it('should return an empty array', function() {
+            const VAL = null;
+
+            const ARR = asArray(VAL);
+
+            assert.ok(Array.isArray(ARR));
+            assert.equal(ARR.length, 0);
+            assert.strictEqual(ARR.length, 0);
+        });
+
+        it('should return an array with a single element', function() {
+            const VAL = null;
+
+            const EXPECTED = [ VAL ];
+            const ACTUAL = asArray(VAL, false);
+
+            assert.ok(Array.isArray(ACTUAL));
+            assert.equal(ACTUAL.length, 1);
+            assert.strictEqual(ACTUAL.length, 1);
+
+            assert.ok(null === ACTUAL[0]);
+            assert.equal(ACTUAL[0], EXPECTED[0]);
+            assert.strictEqual(ACTUAL[0], EXPECTED[0]);
+        });
     });
 
     describe('(undefined)', function() {
@@ -95,6 +120,31 @@ describe('#asArray()', function() {
                     assert.strictEqual(x, undefined);
                 });
             }
+        });
+
+        it('should return an empty array', function() {
+            const VAL = undefined;
+
+            const ARR = asArray(VAL);
+
+            assert.ok(Array.isArray(ARR));
+            assert.equal(ARR.length, 0);
+            assert.strictEqual(ARR.length, 0);
+        });
+
+        it('should return an array with a single element', function() {
+            const VAL = undefined;
+
+            const EXPECTED = [ VAL ];
+            const ACTUAL = asArray(VAL, false);
+
+            assert.ok(Array.isArray(ACTUAL));
+            assert.equal(ACTUAL.length, 1);
+            assert.strictEqual(ACTUAL.length, 1);
+
+            assert.ok('undefined' === typeof ACTUAL[0]);
+            assert.equal(ACTUAL[0], EXPECTED[0]);
+            assert.strictEqual(ACTUAL[0], EXPECTED[0]);
         });
     });
 
@@ -136,6 +186,23 @@ describe('#asArray()', function() {
                 }
             }
         });
+
+        it('should return array with a single item', function() {
+            for (let i = 1; i <= 1000; i++) {
+                const STR = 'TM'.repeat(i);
+
+                const EXPECTED = [ STR ];
+                const ACTUAL = asArray(STR);
+
+                assert.ok(Array.isArray(ACTUAL));
+                assert.equal(ACTUAL.length, 1);
+                assert.strictEqual(ACTUAL.length, 1);
+
+                assert.ok('string' === typeof ACTUAL[0]);
+                assert.equal(ACTUAL[0], EXPECTED[0]);
+                assert.strictEqual(ACTUAL[0], EXPECTED[0]);
+            }
+        });
     });
 
     describe('Number', function() {
@@ -174,6 +241,23 @@ describe('#asArray()', function() {
                     assert.equal(NEW_ARR[j], ARR[j]);
                     assert.strictEqual(NEW_ARR[j], ARR[j]);
                 }
+            }
+        });
+
+        it('should return array with a single item', function() {
+            for (let i = 1; i <= 1000; i++) {
+                const VAL = i * 5979;
+
+                const EXPECTED = [ VAL ];
+                const ACTUAL = asArray(VAL);
+
+                assert.ok(Array.isArray(ACTUAL));
+                assert.equal(ACTUAL.length, 1);
+                assert.strictEqual(ACTUAL.length, 1);
+
+                assert.ok('number' === typeof ACTUAL[0]);
+                assert.equal(ACTUAL[0], EXPECTED[0]);
+                assert.strictEqual(ACTUAL[0], EXPECTED[0]);
             }
         });
     });
