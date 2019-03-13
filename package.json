@@ -56,7 +56,7 @@
     "@types/moment": "^2.13.0",
     "@types/moment-timezone": "^0.5.12",
     "@types/mongoose": "5.2.17",
-    "@types/node": "^8.10.43",
+    "@types/node": "^8.10.44",
     "@types/sanitize-filename": "^1.1.28",
     "@types/tmp": "0.0.33",
     "@types/uuid": "^3.4.3",
@@ -87,7 +87,7 @@
   },
   "devDependencies": {
     "gh-pages": "^2.0.1",
-    "tslint": "^5.13.1",
+    "tslint": "^5.14.0",
     "typedoc": "^0.14.2",
     "typescript": "^3.3.3333"
   }
