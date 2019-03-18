@@ -128,7 +128,7 @@ export abstract class StatisticProviderBase implements StatisticProvider {
         if (false === opts.limit) {
             RESULT.hasMore = false;
         } else {
-            RESULT.hasMore = RESULT.rows.length <= opts.limit;
+            RESULT.hasMore = RESULT.rows.length >= opts.limit;
         }
 
         return RESULT;
