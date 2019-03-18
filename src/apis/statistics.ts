@@ -24,11 +24,26 @@ import * as express from 'express';
  */
 export interface RegisterStatisticsEndpointOptions {
     /**
+     * A custom function that is invoked AFTER a request.
+     *
+     * @param {any} err The error (if occurred).
+     * @param {express.Request} request The request context.
+     * @param {express.Response} response The response context.
+     */
+    afterRequest?: (err: any, request: express.Request, response: express.Response) => any;
+    /**
      * A function that checks if a request is authorized to access the endpoint or not.
      *
      * @return {boolean|PromiseLike<boolean>} The result that indicates if request is authorized or not.
      */
-    authorizer?: (req: express.Request) => boolean | PromiseLike<boolean>;
+    authorizer?: (request: express.Request) => boolean | PromiseLike<boolean>;
+    /**
+     * A custom function that is invoked BEFORE a request is handled.
+     *
+     * @param {express.Request} request The request context.
+     * @param {express.Response} response The response context.
+     */
+    beforeRequest?: (request: express.Request, response: express.Response) => any;
     /**
      * A function that detects a statistic provider by name.
      */
@@ -95,7 +110,14 @@ export function registerStatisticsEndpoint(
     opts: RegisterStatisticsEndpointOptions,
 ) {
     hostOrRouter.get('/stats/:name', async function(req, res) {
+        let err: any;
         try {
+            if (opts.beforeRequest) {
+                await Promise.resolve(
+                    opts.beforeRequest(req, res)
+                );
+            }
+
             let authorized = true;
             if (opts.authorizer) {
                 authorized = toBooleanSafe(
@@ -164,9 +186,17 @@ export function registerStatisticsEndpoint(
             return res.status(404)
                 .send();
         } catch (e) {
+            err = e;
+
             // server error
             return res.status(500)
                 .send();
+        } finally {
+            if (opts.afterRequest) {
+                await Promise.resolve(
+                    opts.afterRequest(err, req, res)
+                );
+            }
         }
     });
 }

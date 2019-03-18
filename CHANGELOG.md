@@ -1,6 +1,6 @@
 # Change Log (@egodigital/egoose)
 
-## 4.9.1
+## 4.9.2
 
 * added classes and interface for handling statistic data
 * fixes
