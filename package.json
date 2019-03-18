@@ -1,6 +1,6 @@
 {
   "name": "@egodigital/egoose",
-  "version": "5.0.1",
+  "version": "5.0.2",
   "description": "Helper classes and functions for Node.js 8 or later.",
   "main": "lib/index.js",
   "private": false,

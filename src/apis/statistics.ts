@@ -50,6 +50,10 @@ export interface RegisterStatisticsEndpointOptions {
      */
     providerDetector: StatisticProviderDetector;
     /**
+     * The custom name of API root.
+     */
+    rootName?: string;
+    /**
      * A custom response handler.
      *
      * @param {StatisticProviderApiResult} result The result to handle.
@@ -131,7 +135,13 @@ export function registerStatisticsEndpoint(
     hostOrRouter: express.Express | express.Router,
     opts: RegisterStatisticsEndpointOptions,
 ) {
-    hostOrRouter.get('/stats/:name', async function(req, res) {
+    let rootName = toStringSafe(opts.rootName)
+        .trim();
+    if ('' === rootName) {
+        rootName = 'stats';
+    }
+
+    hostOrRouter.get(`/${ rootName }/:name`, async function(req, res) {
         const CONTEXT: StatisticApiContext = {
             request: req,
             response: res,
