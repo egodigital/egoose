@@ -89,10 +89,14 @@ export interface StatisticProviderApiResult {
  * A function that detects a statistic provider by name.
  *
  * @param {string} name The name of the provider, in lower case letters.
+ * @param {express.Request} request The request context.
  *
  * @return {StatisticProviderDetectorResult|PromiseLike<StatisticProviderDetectorResult>} The result.
  */
-export type StatisticProviderDetector = (name: string) => StatisticProviderDetectorResult | PromiseLike<StatisticProviderDetectorResult>;
+export type StatisticProviderDetector = (
+    name: string,
+    request: express.Request,
+) => StatisticProviderDetectorResult | PromiseLike<StatisticProviderDetectorResult>;
 
 /**
  * The result of a statistic provider detection function.
@@ -150,7 +154,7 @@ export function registerStatisticsEndpoint(
             const NAME = normalizeString(req.params['name']);
             if ('' !== NAME) {
                 const PROVIDER = await Promise.resolve(
-                    opts.providerDetector(NAME)
+                    opts.providerDetector(NAME, req)
                 );
 
                 if (PROVIDER) {
