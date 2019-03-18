@@ -571,8 +571,10 @@ export * from './fs';
 export * from './geo';
 export * from './http';
 export * from './mail';
-export * from './mongo';
+export * from './mongo/index';
+export * from './mongo/statistics';
 export * from './oauth/microsoft';
+export * from './statistics';
 export * from './streams';
 export * from './system';
 

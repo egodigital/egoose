@@ -1,5 +1,9 @@
 # Change Log (@egodigital/egoose)
 
+## 4.9.0
+
+* added classes and interface for handling statistic data
+
 ## 4.8.3
 
 * added `Stopwatch` class
