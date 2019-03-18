@@ -16,6 +16,7 @@
  */
 
 import { normalizeString, toBooleanSafe, toStringSafe } from '../index';
+import { sendResponse } from '../apis/index';
 import { StatisticParameters, StatisticProvider, StatisticResultRow } from '../statistics/index';
 import * as express from 'express';
 
@@ -27,23 +28,23 @@ export interface RegisterStatisticsEndpointOptions {
      * A custom function that is invoked AFTER a request.
      *
      * @param {any} err The error (if occurred).
-     * @param {express.Request} request The request context.
-     * @param {express.Response} response The response context.
+     * @param {StatisticApiContext} context The context.
      */
-    afterRequest?: (err: any, request: express.Request, response: express.Response) => any;
+    afterRequest?: (err: any, context: StatisticApiContext) => any;
     /**
      * A function that checks if a request is authorized to access the endpoint or not.
      *
+     * @param {StatisticApiContext} context The context.
+     *
      * @return {boolean|PromiseLike<boolean>} The result that indicates if request is authorized or not.
      */
-    authorizer?: (request: express.Request) => boolean | PromiseLike<boolean>;
+    authorizer?: (context: StatisticApiContext) => boolean | PromiseLike<boolean>;
     /**
      * A custom function that is invoked BEFORE a request is handled.
      *
-     * @param {express.Request} request The request context.
-     * @param {express.Response} response The response context.
+     * @param {StatisticApiContext} context The context.
      */
-    beforeRequest?: (request: express.Request, response: express.Response) => any;
+    beforeRequest?: (context: StatisticApiContext) => any;
     /**
      * A function that detects a statistic provider by name.
      */
@@ -52,15 +53,32 @@ export interface RegisterStatisticsEndpointOptions {
      * A custom response handler.
      *
      * @param {StatisticProviderApiResult} result The result to handle.
-     * @param {express.Response} response The response context.
-     * @param {express.Request} request The request context.
+     * @param {StatisticApiContext} context The context.
      *
      * @return {express.Response|PromiseLike<express.Response>} The (new) response context.
      */
     responseHandler?: (
         result: StatisticProviderApiResult,
-        response: express.Response, request: express.Request
+        context: StatisticApiContext,
     ) => express.Response | PromiseLike<express.Response>;
+}
+
+/**
+ * An statistic API request context.
+ */
+export interface StatisticApiContext {
+    /**
+     * The HTTP request context.
+     */
+    readonly request: express.Request;
+    /**
+     * The HTTP response context.
+     */
+    readonly response: express.Response;
+    /**
+     * Gets or sets a value for the whole execution chain.
+     */
+    value?: any;
 }
 
 /**
@@ -114,93 +132,111 @@ export function registerStatisticsEndpoint(
     opts: RegisterStatisticsEndpointOptions,
 ) {
     hostOrRouter.get('/stats/:name', async function(req, res) {
-        let err: any;
-        try {
-            if (opts.beforeRequest) {
-                await Promise.resolve(
-                    opts.beforeRequest(req, res)
-                );
-            }
+        const CONTEXT: StatisticApiContext = {
+            request: req,
+            response: res,
+            value: {},
+        };
 
+        try {
             let authorized = true;
             if (opts.authorizer) {
                 authorized = toBooleanSafe(
                     await Promise.resolve(
-                        opts.authorizer(req)
+                        opts.authorizer(CONTEXT)
                     )
                 );
             }
 
             if (!authorized) {
-                // not authorized
-                return res.status(401)
-                    .send();
+                return sendResponse(CONTEXT.response, {
+                    success: false,
+                }, {
+                    code: 401,
+                });
             }
 
-            // offset
-            let offset = parseInt(
-                toStringSafe(
-                    req.query['o']
-                ).trim()
-            );
+            let err: any;
+            try {
+                if (opts.beforeRequest) {
+                    await Promise.resolve(
+                        opts.beforeRequest(CONTEXT)
+                    );
+                }
 
-            // limit
-            let limit = parseInt(
-                toStringSafe(
-                    req.query['l']
-                ).trim()
-            );
-
-            const NAME = normalizeString(req.params['name']);
-            if ('' !== NAME) {
-                const PROVIDER = await Promise.resolve(
-                    opts.providerDetector(NAME, req)
+                // offset
+                let offset = parseInt(
+                    toStringSafe(
+                        req.query['o']
+                    ).trim()
                 );
 
-                if (PROVIDER) {
-                    const RESULT = await PROVIDER.load({
-                        limit: limit,
-                        offset: offset,
-                        parameters: toStatisticParameters(req.query),
-                    });
+                // limit
+                let limit = parseInt(
+                    toStringSafe(
+                        req.query['l']
+                    ).trim()
+                );
 
-                    let handler = opts.responseHandler;
-                    if (!handler) {
-                        // use default
+                const NAME = normalizeString(req.params['name']);
+                if ('' !== NAME) {
+                    const PROVIDER = await Promise.resolve(
+                        opts.providerDetector(NAME, req)
+                    );
 
-                        handler = (result, response) => {
-                            return response.status(200)
-                                .header('Content-type', 'application/json; charset=utf-8')
-                                .send(Buffer.from(JSON.stringify(result), 'utf8'));
-                        };
+                    if (PROVIDER) {
+                        const RESULT = await PROVIDER.load({
+                            limit: limit,
+                            offset: offset,
+                            parameters: toStatisticParameters(req.query),
+                        });
+
+                        let handler = opts.responseHandler;
+                        if (!handler) {
+                            // use default
+
+                            handler = (result, ctx) => {
+                                return sendResponse(ctx.response, {
+                                    success: true,
+                                    data: result,
+                                });
+                            };
+                        }
+
+                        return await Promise.resolve(
+                            handler({
+                                hasMore: RESULT.hasMore,
+                                offset: RESULT.offset,
+                                rows: RESULT.rows,
+                                totalCount: RESULT.totalCount,
+                            }, CONTEXT)
+                        );
                     }
+                }
 
-                    return await Promise.resolve(
-                        handler({
-                            hasMore: RESULT.hasMore,
-                            offset: RESULT.offset,
-                            rows: RESULT.rows,
-                            totalCount: RESULT.totalCount,
-                        }, res, req)
+                // not found
+                return sendResponse(CONTEXT.response, {
+                    success: false,
+                }, {
+                    code: 404,
+                });
+            } catch (e) {
+                err = e;
+
+                throw e;
+            } finally {
+                if (opts.afterRequest) {
+                    await Promise.resolve(
+                        opts.afterRequest(err, CONTEXT)
                     );
                 }
             }
-
-            // not found
-            return res.status(404)
-                .send();
         } catch (e) {
-            err = e;
-
-            // server error
-            return res.status(500)
-                .send();
-        } finally {
-            if (opts.afterRequest) {
-                await Promise.resolve(
-                    opts.afterRequest(err, req, res)
-                );
-            }
+            return sendResponse(CONTEXT.response, {
+                success: false,
+            }, {
+                code: 500,
+            });
         }
     });
 }

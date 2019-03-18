@@ -15,7 +15,8 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-import { cloneObj, toStringSafe } from '../index';
+import { asArray, cloneObj, toBooleanSafe, toStringSafe } from '../index';
+import * as _ from 'lodash';
 
 /**
  * Parameters for loading statistic data.
@@ -77,7 +78,7 @@ export interface StatisticResult {
     /**
      * The total number of rows.
      */
-    totalCount: number;
+    totalCount?: number;
 }
 
 /**
@@ -105,7 +106,7 @@ export abstract class StatisticProviderBase implements StatisticProvider {
                 .trim()
         );
         if (isNaN(opts.offset)) {
-            opts.offset = 0;
+            opts.offset = 0;  // default
         }
         opts.offset = Math.max(0, opts.offset);
 
@@ -115,21 +116,40 @@ export abstract class StatisticProviderBase implements StatisticProvider {
                 .trim()
         );
         if (isNaN(opts.limit)) {
-            opts.limit = 25;
+            opts.limit = 25;  // default
         }
 
         if (opts.limit < 1) {
-            opts.limit = false;
+            opts.limit = false;  // no limit
         }
 
-        const RESULT = await this.loadInner(opts);
-        RESULT.offset = opts.offset;
+        const RESULT: StatisticResult = {
+            rows: [],
+        };
+        await this.loadInner(opts, RESULT);
 
-        if (false === opts.limit) {
-            RESULT.hasMore = false;
-        } else {
-            RESULT.hasMore = RESULT.rows.length >= opts.limit;
+        // rows
+        RESULT.rows = asArray(RESULT.rows);
+
+        // offset
+        if (_.isNil(RESULT.offset)) {
+            RESULT.offset = opts.offset;
         }
+
+        // totalCount
+        if (_.isNil(RESULT.totalCount)) {
+            RESULT.totalCount = RESULT.rows.length;
+        }
+
+        // hasMore
+        if (_.isNil(RESULT.hasMore)) {
+            if (false === opts.limit) {
+                RESULT.hasMore = false;
+            } else {
+                RESULT.hasMore = RESULT.rows.length >= opts.limit;
+            }
+        }
+        RESULT.hasMore = toBooleanSafe(RESULT.hasMore);
 
         return RESULT;
     }
@@ -137,9 +157,8 @@ export abstract class StatisticProviderBase implements StatisticProvider {
     /**
      * The logic for the 'load()' method.
      *
-     * @param {contracts.StatisticOptions} opts The custom options.
-     *
-     * @return {Promise<StatisticResult>} The promise with the result.
+     * @param {StatisticOptions} opts The custom options.
+     * @param {StatisticResult} result A predefined object, that has to be filled with the result data.
      */
-    protected abstract loadInner(opts: StatisticOptions): Promise<StatisticResult>;
+    protected abstract loadInner(opts: StatisticOptions, result: StatisticResult): Promise<void>;
 }
