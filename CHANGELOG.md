@@ -1,8 +1,9 @@
 # Change Log (@egodigital/egoose)
 
-## 5.0.0
+## 5.0.1
 
 * refactored concept of handling and providing statistic data
+* fixes
 
 ## 4.9.4
 
