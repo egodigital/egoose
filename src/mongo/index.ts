@@ -133,7 +133,7 @@ export class MongoDatabase {
         this._mongo = await mongoose.createConnection(
             connStr,
             MergeDeep(OPTS, this.options.mongooseOptions)
-        );
+        );  // tslint:disable-line
 
         return true;
     }
