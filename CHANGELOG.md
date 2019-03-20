@@ -1,5 +1,9 @@
 # Change Log (@egodigital/egoose)
 
+## 5.1.0
+
+* added `asBuffer()` function
+
 ## 5.0.2
 
 * refactored concept of handling and providing statistic data

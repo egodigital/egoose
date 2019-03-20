@@ -16,9 +16,53 @@
  */
 
 import * as _ from 'lodash';
-import { normalizeString } from '../index';
+import { normalizeString, toStringSafe } from '../index';
 import { tryRemoveListener } from '../events';
+import * as isStream from 'is-stream';
 import * as Stream from 'stream';
+
+/**
+ * Returns a value as buffer.
+ *
+ * @param {any} data The input data.
+ * @param {string} [enc] The custom encoding for string to use. Default: utf8
+ *
+ * @return {Promise<Buffer>} The promise with the buffer.
+ */
+export async function asBuffer(data: any, enc?: string): Promise<Buffer> {
+    enc = normalizeString(enc);
+    if ('' === enc) {
+        enc = 'utf8';
+    }
+
+    return await asBufferInner(data, enc, 0);
+}
+
+async function asBufferInner(data: any, enc: string, level: number): Promise<Buffer> {
+    if (level > 63) {
+        throw new Error('StackOverflow: asBufferInner()');
+    }
+
+    if (Buffer.isBuffer(data)) {
+        return data;
+    }
+
+    if (isStream(data)) {
+        return await readAll(<any>data, enc);
+    }
+
+    if (_.isFunction(data)) {
+        return await asBufferInner(
+            await Promise.resolve(
+                data(enc)
+            ), enc, level + 1
+        );
+    }
+
+    return Buffer.from(
+        toStringSafe(data), enc,
+    );
+}
 
 /**
  * Reads the content of a stream.
