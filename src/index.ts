@@ -564,6 +564,8 @@ export * from './apis/host';
 export * from './apis/index';
 export * from './apis/statistics';
 export * from './azure/storage';
+export * from './cache';
+export * from './cache/redis';
 export * from './dev';
 export * from './diagnostics/logger';
 export * from './diagnostics/stopwatch';
