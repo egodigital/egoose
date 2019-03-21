@@ -1,5 +1,9 @@
 # Change Log (@egodigital/egoose)
 
+## 5.2.0
+
+* added cache framework with [Redis](https://redis.io/) support
+
 ## 5.1.0
 
 * added `asBuffer()` function
