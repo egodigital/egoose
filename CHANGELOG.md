@@ -1,8 +1,9 @@
 # Change Log (@egodigital/egoose)
 
-## 5.2.0
+## 5.2.1
 
 * added cache framework with [Redis](https://redis.io/) support
+* fixes
 
 ## 5.1.0
 

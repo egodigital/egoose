@@ -94,7 +94,7 @@ export class RedisCache extends CacheBase {
                         client.get(key, (err, value) => {
                             try {
                                 if (err) {
-                                    reject(defaultValue);
+                                    reject(err);
                                 } else {
                                     if (_.isNil(value)) {
                                         resolve(defaultValue);
@@ -104,12 +104,12 @@ export class RedisCache extends CacheBase {
                                         );
                                     }
                                 }
-                            } catch {
-                                reject(defaultValue);
+                            } catch (e) {
+                                reject(e);
                             }
                         });
                     } catch (e) {
-                        reject(defaultValue);
+                        reject(e);
                     }
                 });
             }
