@@ -1,5 +1,9 @@
 # Change Log (@egodigital/egoose)
 
+## 5.4.0
+
+* optimized `jsonObject()` function
+
 ## 5.3.0
 
 * added `jsonObject()` function

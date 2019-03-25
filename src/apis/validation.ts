@@ -19,6 +19,7 @@ import * as _ from 'lodash';
 import * as express from 'express';
 import * as joi from 'joi';
 import { toBooleanSafe } from '../index';
+import { OptionsJson } from 'body-parser';
 
 /**
  * Options for 'jsonObject()' function.
@@ -36,6 +37,10 @@ export interface JsonObjectOptions {
      * A custom function, that handles a failed validation.
      */
     failedHandler?: JsonObjectValidationFailedHandler;
+    /**
+     * Custom options for the Express json() middleware.
+     */
+    options?: OptionsJson;
     /**
      * The optional schema to use.
      */
@@ -81,11 +86,25 @@ export interface JsonObjectValidationFailedHandlerContext {
 /**
  * Creates Express middlewares for validating JSON input.
  *
- * @param {JsonObjectOptions} [opts] Custom options.
+ * @param {JsonObjectOptions|joi.ObjectSchema} [optsOrSchema] Custom options or schema.
  *
  * @return {express.RequestHandler[]} The created handler(s).
  */
-export function jsonObject(opts?: JsonObjectOptions): express.RequestHandler[] {
+export function jsonObject(
+    optsOrSchema?: JsonObjectOptions | joi.ObjectSchema
+): express.RequestHandler[] {
+    let opts: JsonObjectOptions;
+
+    if (optsOrSchema) {
+        if (optsOrSchema['isJoi']) {
+            opts = <any>{
+                schema: optsOrSchema as joi.ObjectSchema,
+            };
+        } else {
+            opts = optsOrSchema as JsonObjectOptions;
+        }
+    }
+
     if (!opts) {
         opts = <any>{};
     }
@@ -113,7 +132,7 @@ export function jsonObject(opts?: JsonObjectOptions): express.RequestHandler[] {
     const HANDLERS: express.RequestHandler[] = [];
 
     HANDLERS.push(
-        express.json()
+        express.json(opts.options)
     );
 
     if (opts.schema) {
