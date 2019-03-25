@@ -1,5 +1,9 @@
 # Change Log (@egodigital/egoose)
 
+## 5.3.0
+
+* added `jsonObject()` function
+
 ## 5.2.1
 
 * added cache framework with [Redis](https://redis.io/) support

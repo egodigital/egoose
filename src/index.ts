@@ -563,6 +563,7 @@ export function uuid(version?: string, ...args: any[]): string {
 export * from './apis/host';
 export * from './apis/index';
 export * from './apis/statistics';
+export * from './apis/validation';
 export * from './azure/storage';
 export * from './cache';
 export * from './cache/redis';
