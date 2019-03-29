@@ -1,8 +1,9 @@
 # Change Log (@egodigital/egoose)
 
-## 5.6.0
+## 5.6.1
 
 * added WebSocket types
+* fixes
 
 ## 5.5.0
 

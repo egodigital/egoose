@@ -134,6 +134,10 @@ export class WebSocketHost extends events.EventEmitter {
                     return;
                 }
 
+                NEW_SERVER.once('error', (err) => {
+                    reject(err);
+                });
+
                 const WSS = new ws.Server({
                     server: NEW_SERVER,
                 });
