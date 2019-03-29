@@ -80,6 +80,15 @@ export interface GetAppVersionOptions {
 }
 
 /**
+ * A predciate.
+ *
+ * @param {TValue} value The value to check.
+ *
+ * @return {boolean} Value matches predicate or not.
+ */
+export type Predicate<TValue = any> = (value: TValue) => boolean;
+
+/**
  * Applies an object or value to a function.
  *
  * @param {TFunc} func The function to apply 'thisArg' to.
@@ -574,6 +583,7 @@ export * from './events';
 export * from './fs';
 export * from './geo';
 export * from './http';
+export * from './http/websockets';
 export * from './mail';
 export * from './mongo/index';
 export * from './mongo/statistics';
