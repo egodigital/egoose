@@ -1,5 +1,9 @@
 # Change Log (@egodigital/egoose)
 
+## 5.7.0
+
+* added `parseCommandLine()` function
+
 ## 5.6.1
 
 * added WebSocket types

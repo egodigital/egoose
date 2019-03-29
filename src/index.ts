@@ -24,6 +24,7 @@ import * as moment from 'moment-timezone';
 import * as util from 'util';
 import * as UUID from 'uuid';
 import * as UUID_v5 from 'uuid/v5';
+import * as yargs from 'yargs-parser';
 
 /**
  * Stores version information about the app.
@@ -77,6 +78,20 @@ export interface GetAppVersionOptions {
      * The custom working directory.
      */
     cwd?: string;
+}
+
+/**
+ * A result of 'parseCommandLine()' function.
+ */
+export interface ParsedCommandLine {
+    /**
+     * The arguments.
+     */
+    arguments: yargs.Arguments;
+    /**
+     * The command.
+     */
+    command?: string;
 }
 
 /**
@@ -432,6 +447,40 @@ export function now(timezone?: string): moment.Moment {
     const NOW = moment();
     return '' === timezone ? NOW
                            : NOW.tz(timezone);
+}
+
+/**
+ * Parses a value as string of a command line input.
+ *
+ * @param {any} cmd The command line input.
+ *
+ * @return {ParsedCommandLine} The parsed data.
+ */
+export function parseCommandLine(cmd: any): ParsedCommandLine {
+    cmd = toStringSafe(cmd).trim();
+
+    const ARGS = yargs(cmd);
+
+    cmd = normalizeString(ARGS._[0]);
+
+    ARGS._ = ARGS._.filter((a, i) => i > 0).map(a => {
+        if (a.startsWith('"') && a.endsWith('"')) {
+            a = a.substr(1, a.length - 2);
+            a = a.split('\\"')
+                 .join('"');
+        }
+
+        return a;
+    });
+
+    if ('' === cmd) {
+        cmd = undefined;
+    }
+
+    return {
+        arguments: ARGS,
+        command: cmd,
+    };
 }
 
 /**

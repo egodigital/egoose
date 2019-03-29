@@ -1,6 +1,6 @@
 {
   "name": "@egodigital/egoose",
-  "version": "5.6.1",
+  "version": "5.7.0",
   "description": "Helper classes and functions for Node.js 8 or later.",
   "main": "lib/index.js",
   "private": false,
@@ -91,9 +91,11 @@
     "sanitize-filename": "^1.6.1",
     "tmp": "0.0.33",
     "uuid": "^3.3.2",
-    "ws": "^6.2.1"
+    "ws": "^6.2.1",
+    "yargs-parser": "^13.0.0"
   },
   "devDependencies": {
+    "@types/yargs-parser": "^11.0.2",
     "gh-pages": "^2.0.1",
     "tslint": "^5.14.0",
     "typedoc": "^0.14.2",
