@@ -1,5 +1,9 @@
 # Change Log (@egodigital/egoose)
 
+## 5.6.0
+
+* added WebSocket types
+
 ## 5.5.0
 
 * added `addressToGeoCoordinates()` function
