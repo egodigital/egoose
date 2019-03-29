@@ -16,9 +16,29 @@
  */
 
 import { POST } from '../http';
-import { normalizeString } from '../index';
+import { toBooleanSafe, toStringSafe, normalizeString } from '../index';
+import * as _ from 'lodash';
+import * as geocoder from 'node-geocoder';
 const geodist = require('geodist');
 const polyline = require('@mapbox/polyline');
+
+/**
+ * Options for 'addressToGeoCoordinates()' function.
+ */
+export interface AddressToGeoCoordinatesOptions {
+    /**
+     * The city.
+     */
+    city?: string;
+    /**
+     * The street (with house number, if available).
+     */
+    street?: string;
+    /**
+     * The zip code.
+     */
+    zipCode?: string;
+}
 
 /**
  * Geo coordinates.
@@ -39,6 +59,74 @@ interface MapBoxRouteResult {
     routes: {
         geometry: string;
     }[];
+}
+
+/**
+ * Tries to detect geo coordinates from address data.
+ *
+ * @param {string|AddressToGeoCoordinatesOptions} queryOrOpts The query string or the options.
+ * @param {boolean} [throwOnError] Throw an exception on error or return (false). Default: (false)
+ *
+ * @return {GeoCoordinates|false} The location or (false) if not found.
+ */
+export async function addressToGeoCoordinates(
+    queryOrOpts: string | AddressToGeoCoordinatesOptions,
+    throwOnError?: boolean,
+): Promise<GeoCoordinates | false> {
+    let query: string;
+    if (_.isObjectLike(queryOrOpts)) {
+        const OPTS = queryOrOpts as AddressToGeoCoordinatesOptions;
+
+        query = `${ toStringSafe(OPTS.street) } ${ toStringSafe(OPTS.zipCode) } ${ toStringSafe(OPTS.city) }`;
+    } else {
+        query = toStringSafe(queryOrOpts);
+    }
+
+    const ADDR_STR = normalizeString(query)
+        .split(' ')
+        .map(x => x.trim())
+        .filter(x => '' !== x)
+        .join(' ');
+
+    if ('' !== ADDR_STR) {
+        try {
+            const CLIENT_OPTS: geocoder.Options = {
+                provider: 'google',
+                httpAdapter: 'https',
+                apiKey: toStringSafe(
+                    process.env.GOOGLE_API_KEY
+                ).trim(),
+                formatter: null,
+            };
+
+            const CLIENT = geocoder(CLIENT_OPTS);
+
+            const RESULT = await CLIENT.geocode(ADDR_STR);
+            if (RESULT && RESULT.length) {
+                const ENTRY = RESULT[0];
+                if (ENTRY) {
+                    const COORDINATES: GeoCoordinates = {
+                        lat: parseFloat(
+                            toStringSafe(ENTRY.latitude).trim(),
+                        ),
+                        lng: parseFloat(
+                            toStringSafe(ENTRY.longitude).trim(),
+                        ),
+                    };
+
+                    if (!isNaN(COORDINATES.lat) && !isNaN(COORDINATES.lng)) {
+                        return COORDINATES;
+                    }
+                }
+            }
+        } catch (e) {
+            if (toBooleanSafe(throwOnError)) {
+                throw e;  /// re-throw
+            }
+        }
+    }
+
+    return false;
 }
 
 /**

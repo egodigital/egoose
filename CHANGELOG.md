@@ -1,5 +1,9 @@
 # Change Log (@egodigital/egoose)
 
+## 5.5.0
+
+* added `addressToGeoCoordinates()` function
+
 ## 5.4.0
 
 * optimized `jsonObject()` function
