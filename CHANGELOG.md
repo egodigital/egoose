@@ -1,5 +1,9 @@
 # Change Log (@egodigital/egoose)
 
+## 5.8.0
+
+* added `glob()` and `globSync()` functions
+
 ## 5.7.0
 
 * added `parseCommandLine()` function
