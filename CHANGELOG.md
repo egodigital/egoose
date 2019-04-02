@@ -1,5 +1,9 @@
 # Change Log (@egodigital/egoose)
 
+## 5.10.0
+
+* [WebSocketHostServerFactory](https://egodigital.github.io/egoose/modules/_http_websockets_.html#websockethostserverfactory) now supports secure HTTP servers
+
 ## 5.9.0
 
 * web socket servers can now verify remote clients

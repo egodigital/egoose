@@ -19,6 +19,7 @@ import { normalizeString, Predicate, toBooleanSafe, toStringSafe } from '../inde
 import * as _ from 'lodash';
 import * as events from 'events';
 import * as http from 'http';
+import * as https from 'https';
 import * as ws from 'ws';
 
 /**
@@ -67,9 +68,15 @@ export interface WebSocketHostOptions {
 /**
  * Describes a factory function, that creates a custom server instance.
  *
- * @return {http.Server|PromiseLike<http.Server>} The result with the new server instance.
+ * @return {WebSocketHostServerFactoryResult|PromiseLike<WebSocketHostServerFactoryResult>} The result with the new server instance.
  */
-export type WebSocketHostServerFactory = () => http.Server | PromiseLike<http.Server>;
+export type WebSocketHostServerFactory = () =>
+    WebSocketHostServerFactoryResult | PromiseLike<WebSocketHostServerFactoryResult>;
+
+/**
+ * A possible result of 'WebSocketHostServerFactory'.
+ */
+export type WebSocketHostServerFactoryResult = http.Server | https.Server;
 
 /**
  * A web socket message.
@@ -102,7 +109,7 @@ export type WebSocketOnTypeEventListener<TData = any> = (data: TData, type: stri
  * A web socket host.
  */
 export class WebSocketHost extends events.EventEmitter {
-    private _server: http.Server;
+    private _server: http.Server | https.Server;
 
     /**
      * Initializes a new instance of that class.
