@@ -1,5 +1,9 @@
 # Change Log (@egodigital/egoose)
 
+## 5.9.0
+
+* web socket servers can now verify remote clients
+
 ## 5.8.0
 
 * added `glob()` and `globSync()` functions

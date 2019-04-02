@@ -22,6 +22,31 @@ import * as http from 'http';
 import * as ws from 'ws';
 
 /**
+ * Context of a client verifier.
+ */
+export interface WebSocketHostClientVerifierContext {
+    /**
+     * Indicates if connection is secure or not.
+     */
+    isSecure: boolean;
+    /**
+     * The request context.
+     */
+    request: http.IncomingMessage;
+}
+
+/**
+ * Verifies a remote client.
+ *
+ * @param {WebSocketHostClientVerifierContext} context The context.
+ *
+ * @return {boolean|PromiseLike<boolean>} The result, that indicates, if client is valid or not.
+ */
+export type WebSocketHostClientVerifier = (
+    context: WebSocketHostClientVerifierContext,
+) => boolean | PromiseLike<boolean>;
+
+/**
  * Options for a 'WebSocketHost'.
  */
 export interface WebSocketHostOptions {
@@ -33,6 +58,10 @@ export interface WebSocketHostOptions {
      * A factory function, that creates a custom server instance.
      */
     serverFactory?: WebSocketHostServerFactory;
+    /**
+     * An optional function to verify a client.
+     */
+    verifyClient?: WebSocketHostClientVerifier;
 }
 
 /**
@@ -138,8 +167,34 @@ export class WebSocketHost extends events.EventEmitter {
                     reject(err);
                 });
 
+                const VERIFY_CLIENT: ws.VerifyClientCallbackAsync = async (info, callback) => {
+                    let isValid = true;
+
+                    try {
+                        if (this.options.verifyClient) {
+                            isValid = toBooleanSafe(
+                                await Promise.resolve(
+                                    this.options.verifyClient({
+                                        isSecure: info.secure,
+                                        request: info.req,
+                                    }),
+                                )
+                            );
+                        }
+                    } catch {
+                        isValid = false;
+                    }
+
+                    if (isValid) {
+                        callback(true);
+                    } else {
+                        callback(false, 401);
+                    }
+                };
+
                 const WSS = new ws.Server({
                     server: NEW_SERVER,
+                    verifyClient: VERIFY_CLIENT,
                 });
 
                 WSS.on('error', (err) => {
