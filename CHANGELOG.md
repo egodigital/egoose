@@ -1,5 +1,9 @@
 # Change Log (@egodigital/egoose)
 
+## 5.11.0
+
+* added `isAppEnv()` function
+
 ## 5.10.0
 
 * [WebSocketHostServerFactory](https://egodigital.github.io/egoose/modules/_http_websockets_.html#websockethostserverfactory) now supports secure HTTP servers

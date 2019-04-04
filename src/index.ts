@@ -628,6 +628,7 @@ export * from './cache/redis';
 export * from './dev';
 export * from './diagnostics/logger';
 export * from './diagnostics/stopwatch';
+export * from './env';
 export * from './events';
 export * from './fs';
 export * from './geo';
