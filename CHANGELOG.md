@@ -1,5 +1,9 @@
 # Change Log (@egodigital/egoose)
 
+## 5.12.0
+
+* added `setupSwaggerUIFromSourceFiles()` function from [swagger-jsdoc-express](https://www.npmjs.com/package/swagger-jsdoc-express)
+
 ## 5.11.0
 
 * added `isAppEnv()` function

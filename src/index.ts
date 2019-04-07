@@ -643,3 +643,4 @@ export * from './streams';
 export * from './system';
 
 export { asEnumerable, from, isEnumerable, isSequence, popFrom, random, range, repeat, shiftFrom } from 'node-enumerable';
+export { setupSwaggerUIFromSourceFiles } from 'swagger-jsdoc-express';
