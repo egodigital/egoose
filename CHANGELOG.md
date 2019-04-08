@@ -1,6 +1,6 @@
 # Change Log (@egodigital/egoose)
 
-## 5.13.0
+## 5.13.1
 
 * updated to `swagger-jsdoc-express@1.1.0`
 
