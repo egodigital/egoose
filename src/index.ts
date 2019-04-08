@@ -463,11 +463,13 @@ export function parseCommandLine(cmd: any): ParsedCommandLine {
 
     cmd = normalizeString(ARGS._[0]);
 
-    ARGS._ = ARGS._.filter((a, i) => i > 0).map(a => {
-        if (a.startsWith('"') && a.endsWith('"')) {
-            a = a.substr(1, a.length - 2);
-            a = a.split('\\"')
-                 .join('"');
+    ARGS._ = ARGS._.filter((a, i) => i > 0).map((a: any) => {
+        if (_.isString(a)) {
+            if (a.startsWith('"') && a.endsWith('"')) {
+                a = a.substr(1, a.length - 2);
+                a = a.split('\\"')
+                     .join('"');
+            }
         }
 
         return a;
