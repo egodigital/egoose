@@ -1,5 +1,9 @@
 # Change Log (@egodigital/egoose)
 
+## 5.13.0
+
+* updated to `swagger-jsdoc-express@1.1.0`
+
 ## 5.12.1
 
 * added `setupSwaggerUIFromSourceFiles()` function from [swagger-jsdoc-express](https://www.npmjs.com/package/swagger-jsdoc-express)
