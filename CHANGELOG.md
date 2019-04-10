@@ -1,5 +1,9 @@
 # Change Log (@egodigital/egoose)
 
+## 5.15.0
+
+* added `doNotNormalizeHeaders` property to [HttpRequestOptions](https://egodigital.github.io/egoose/interfaces/_http_index_.httprequestoptions.html) interface
+
 ## 5.14.0
 
 * updated to `swagger-jsdoc-express@1.2.0`

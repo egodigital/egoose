@@ -16,6 +16,10 @@ npm install --save @egodigital/egoose
 
 API documentation can be found [here](https://egodigital.github.io/egoose/).
 
+## Samples
+
+[egoose-samples](https://github.com/egodigital/egoose-samples) contains a repository of samples, which demonstrate, how to use the functions and classes of that module.
+
 ## Build
 
 ### Module

@@ -20,7 +20,7 @@ import { readAll } from '../streams';
 const NormalizeHeaderCase = require("header-case-normalizer");
 import * as HTTP from 'http';
 import * as HTTPs from 'https';
-import { isEmptyString, normalizeString, toStringSafe } from '../index';
+import { isEmptyString, normalizeString, toBooleanSafe, toStringSafe } from '../index';
 import * as IsStream from 'is-stream';
 import { Readable, Writable } from 'stream';
 import * as url from 'url';
@@ -46,6 +46,10 @@ export type HttpRequestBodyProvider = () => HttpRequestBodyValue | Promise<HttpR
  * Options for a HTTP request.
  */
 export interface HttpRequestOptions {
+    /**
+     * Do not normalize the names of HTTP request headers.
+     */
+    doNotNormalizeHeaders?: boolean;
     /**
      * The custom headers to send.
      */
@@ -328,11 +332,15 @@ export function request(method: string, u: HttpRequestUrl, opts?: HttpRequestOpt
 
             if (!_.isNil(opts.headers)) {
                 for (const H in opts.headers) {
-                    REQUEST_OPTS.headers[
+                    const HEADER_NAME =
+                        toBooleanSafe(opts.doNotNormalizeHeaders) ?
+                        toStringSafe(H).trim() :
                         NormalizeHeaderCase(
                             toStringSafe(H).trim()
-                        )
-                    ] = toStringSafe(opts.headers[H]);
+                        );
+
+                    REQUEST_OPTS.headers[HEADER_NAME] =
+                        toStringSafe(opts.headers[H]);
                 }
             }
 
