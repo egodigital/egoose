@@ -642,6 +642,7 @@ export * from './mongo/statistics';
 export * from './oauth/microsoft';
 export * from './statistics';
 export * from './streams';
+export * from './strings';
 export * from './system';
 
 export { asEnumerable, from, isEnumerable, isSequence, popFrom, random, range, repeat, shiftFrom } from 'node-enumerable';
