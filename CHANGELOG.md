@@ -1,5 +1,16 @@
 # Change Log (@egodigital/egoose)
 
+## 5.17.0
+
+* updated to `azure-storage@2.10.3`
+* updated to `moment-timezone@0.5.25`
+* updated to `mime-types@2.1.24`
+
+## 5.16.0
+
+* added [format()](https://egodigital.github.io/egoose/modules/_strings_index_.html#format) and [formatArray()](https://egodigital.github.io/egoose/modules/_strings_index_.html#formatarray) functions
+* updated to `swagger-jsdoc-express@1.3.1`
+
 ## 5.15.0
 
 * added `doNotNormalizeHeaders` property to [HttpRequestOptions](https://egodigital.github.io/egoose/interfaces/_http_index_.httprequestoptions.html) interface
