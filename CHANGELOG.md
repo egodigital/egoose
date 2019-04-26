@@ -1,5 +1,9 @@
 # Change Log (@egodigital/egoose)
 
+## 5.18.0
+
+* added `connector` property to [MongoDatabaseOptions](https://egodigital.github.io/egoose/interfaces/_mongo_index_.mongodatabaseoptions.html)
+
 ## 5.17.0
 
 * updated to `azure-storage@2.10.3`

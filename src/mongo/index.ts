@@ -55,6 +55,12 @@ export interface LogsDocument extends mongoose.Document {
  */
 export interface MongoDatabaseOptions {
     /**
+     * A custom function, that creates a Mongoose connection
+     * from objects, when executing MongoDatabase.connect().
+     */
+    readonly connector?: (opts: MongoDatabaseOptions) =>
+        mongoose.Connection | PromiseLike<mongoose.Connection>;
+    /**
      * The name of the database.
      */
     readonly database: string;
@@ -111,9 +117,20 @@ export class MongoDatabase {
      *
      * @return {Promise<boolean>} The promise, which indicates if operation was successful or not.
      */
-    public async connect() {
+    public async connect(): Promise<boolean> {
         if (this.isConnected) {
             return false;
+        }
+
+        const CONNECTOR = this.options.connector;
+        if (CONNECTOR) {
+            // use custom connector
+            const NEW_CONNECTION = await Promise.resolve(
+                CONNECTOR(this.options)
+            );
+
+            this._mongo = NEW_CONNECTION;
+            return !_.isNil(NEW_CONNECTION);
         }
 
         let connStr = 'mongodb://' + toStringSafe(this.options.host) + ':' + toStringSafe(this.options.port) + '/' + toStringSafe(this.options.database);
