@@ -640,6 +640,7 @@ export * from './mail';
 export * from './mongo/index';
 export * from './mongo/statistics';
 export * from './oauth/microsoft';
+export * from './schemas';
 export * from './statistics';
 export * from './streams';
 export * from './strings';

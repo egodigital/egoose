@@ -1,5 +1,10 @@
 # Change Log (@egodigital/egoose)
 
+## 5.19.0
+
+* added `isJoi()` function
+* updated to `body-parser@1.19.0`
+
 ## 5.18.0
 
 * added `connector` property to [MongoDatabaseOptions](https://egodigital.github.io/egoose/interfaces/_mongo_index_.mongodatabaseoptions.html)
