@@ -1,5 +1,9 @@
 # Change Log (@egodigital/egoose)
 
+## 5.20.0
+
+* added zip bilder classes and functions
+
 ## 5.19.0
 
 * added `isJoi()` function
