@@ -1,5 +1,12 @@
 # Change Log (@egodigital/egoose)
 
+## 5.21.0
+
+* added `addFiles()` to `ZipBuilder` class
+* leading `/` chars are now supported as zip file paths
+* added additional `opts` argument for [Cache.set()](https://egodigital.github.io/egoose/interfaces/_cache_index_.cache.html#set) method
+* updated to `yargs-parser@13.1.0`
+
 ## 5.20.0
 
 * added zip bilder classes and functions

@@ -18,7 +18,7 @@
 import * as _ from 'lodash';
 import * as redis from 'redis';
 import { toStringSafe } from '../index';
-import { CacheBase } from './index';
+import { CacheBase, SetCacheValueOptions } from './index';
 
 /**
  * Options for redis cache (client).
@@ -117,12 +117,25 @@ export class RedisCache extends CacheBase {
     }
 
     /** @inheritdoc */
-    protected async setInner(key: any, value: any): Promise<void> {
+    protected async setInner(
+        key: any, value: any,
+        opts: SetCacheValueOptions
+    ): Promise<void> {
+        let ttl: false | number = parseInt(
+            toStringSafe(this.getOptionValue(opts, 'ttl'))
+                .trim()
+        );
+        if (isNaN(ttl)) {
+            ttl = false;
+        }
+
         await this.withConnection(
             (client) => {
                 return new Promise<void>((resolve, reject) => {
                     try {
                         if (_.isNil(value)) {
+                            // no data => delete
+
                             client.del(key, (err) => {
                                 if (err) {
                                     reject(err);
@@ -131,13 +144,23 @@ export class RedisCache extends CacheBase {
                                 }
                             });
                         } else {
-                            client.set(key, JSON.stringify(value), (err) => {
+                            const VALUE_TO_SAVE = JSON.stringify(value);
+                            const CALLBACK = (err: any) => {
                                 if (err) {
                                     reject(err);
                                 } else {
                                     resolve();
                                 }
-                            });
+                            };
+
+                            if (false === ttl) {
+                                client.set(key, VALUE_TO_SAVE,
+                                    CALLBACK);
+                            } else {
+                                client.set(key, VALUE_TO_SAVE,
+                                    'EX', ttl,
+                                    CALLBACK);
+                            }
                         }
                     } catch (e) {
                         reject(e);

@@ -16,9 +16,10 @@
  */
 
 import * as fsExtra from 'fs-extra';
+import * as path from 'path';
 import * as yazl from 'yazl';
-import { tempFile } from '../fs';
-import { toStringSafe } from '../index';
+import { glob, tempFile } from '../fs';
+import { isEmptyString, toStringSafe } from '../index';
 
 type ZipBuilderStep = (zip: yazl.ZipFile) => any;
 
@@ -32,15 +33,15 @@ export class ZipBuilder {
     /**
      * Adds a buffer.
      *
-     * @param {string} path The path in the zip file.
+     * @param {string} p The path in the zip file.
      * @param {Buffer} data The data to write.
      *
      * @return this
      */
-    public addBuffer(path: string, data: Buffer): this {
+    public addBuffer(p: string, data: Buffer): this {
         this._STEPS.push((zip) => {
             zip.addBuffer(data,
-                toStringSafe(path));
+                normalizeZipPath(p));
         });
 
         return this;
@@ -49,13 +50,60 @@ export class ZipBuilder {
     /**
      * Adds an empty directory.
      *
-     * @param {string} path The path in the zip file.
+     * @param {string} p The path in the zip file.
      *
      * @return this
      */
-    public addDir(path: string): this {
+    public addDir(p: string): this {
         this._STEPS.push((zip) => {
-            zip.addEmptyDirectory(toStringSafe(path));
+            zip.addEmptyDirectory(
+                normalizeZipPath(p));
+        });
+
+        return this;
+    }
+
+    /**
+     * Adds all files of a local directory.
+     *
+     * @param {string} dir The path of the local directory.
+     * @param {string} [basePath] The custom base (zip) path.
+     */
+    public addFiles(dir: string, basePath?: string): this {
+        dir = toStringSafe(dir);
+        if (isEmptyString(dir)) {
+            dir = process.cwd();
+        }
+        if (!path.isAbsolute(dir)) {
+            dir = path.join(
+                process.cwd(), dir
+            );
+        }
+        dir = path.resolve(dir);
+
+        basePath = normalizeZipPath(basePath) + '/';
+
+        this._STEPS.push(async (zip) => {
+            const FILES = await glob('**/**', {
+                absolute: true,
+                cwd: dir,
+                deep: true,
+                dot: true,
+                onlyFiles: true,
+                unique: true,
+            }) as string[];
+
+            for (const F of FILES) {
+                const ZIP_PATH = normalizeZipPath(
+                    basePath + normalizeZipPath(
+                        path.relative(
+                            dir, F
+                        )
+                    )
+                );
+
+                zip.addFile(F, ZIP_PATH);
+            }
         });
 
         return this;
@@ -130,4 +178,22 @@ export class ZipBuilder {
  */
 export function buildZip(): ZipBuilder {
     return new ZipBuilder();
+}
+
+function normalizeZipPath(p: string): string {
+    p = toStringSafe(p)
+        .replace(path.sep, '/')
+        .trim();
+
+    // remove leading and ending /
+    while (p.startsWith('/')) {
+        p = p.substr(1)
+            .trim();
+    }
+    while (p.endsWith('/')) {
+        p = p.substr(0, p.length - 1)
+            .trim();
+    }
+
+    return p;
 }
