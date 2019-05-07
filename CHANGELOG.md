@@ -1,5 +1,10 @@
 # Change Log (@egodigital/egoose)
 
+## 5.22.0
+
+* updated to `@mapbox/polyline@1.1.0`
+* updated to `swagger-jsdoc-express@1.4.0`
+
 ## 5.21.0
 
 * added `addFiles()` to `ZipBuilder` class
