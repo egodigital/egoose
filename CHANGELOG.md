@@ -1,5 +1,9 @@
 # Change Log (@egodigital/egoose)
 
+## 6.0.0
+
+* changed to [Node.js 10](https://nodejs.org/en/blog/release/v10.0.0/) support
+
 ## 5.22.0
 
 * updated to `@mapbox/polyline@1.1.0`

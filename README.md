@@ -2,7 +2,7 @@
 
 # egoose
 
-Helper classes and functions for [Node.js 8+](https://nodejs.org/) written in [TypeScript](https://www.typescriptlang.org/).
+Helper classes and functions for [Node.js 10+](https://nodejs.org/dist/latest-v10.x/docs/api/) written in [TypeScript](https://www.typescriptlang.org/).
 
 ## Install
 
