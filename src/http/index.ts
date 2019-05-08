@@ -287,7 +287,7 @@ export function request(method: string, u: HttpRequestUrl, opts?: HttpRequestOpt
             };
 
             let request: HTTP.ClientRequest;
-            const CALLBACK = (response: HTTP.ClientResponse) => {
+            const CALLBACK = (response: any) => {
                 let respBody: false | Buffer = false;
 
                 const RESPONSE: HttpResponse = {
