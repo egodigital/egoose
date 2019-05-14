@@ -1,5 +1,10 @@
 # Change Log (@egodigital/egoose)
 
+## 6.1.0
+
+* added `createQueue()` function
+* updated to `errorhandler@1.5.1`
+
 ## 6.0.0
 
 * changed to [Node.js 10](https://nodejs.org/en/blog/release/v10.0.0/) support
