@@ -1,5 +1,9 @@
 # Change Log (@egodigital/egoose)
 
+## 6.2.0
+
+* updated to `swagger-jsdoc-express@1.5.0`
+
 ## 6.1.0
 
 * added `createQueue()` function
