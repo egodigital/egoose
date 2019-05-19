@@ -1,5 +1,9 @@
 # Change Log (@egodigital/egoose)
 
+## 6.4.0
+
+* updated to `swagger-jsdoc-express@2.0.0`
+
 ## 6.3.0
 
 * set [TypeScript](https://www.typescriptlang.org) compiler target and lib to `es2017`

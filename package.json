@@ -1,6 +1,6 @@
 {
   "name": "@egodigital/egoose",
-  "version": "6.3.0",
+  "version": "6.4.0",
   "description": "Helper classes and functions for Node.js 8 or later.",
   "main": "lib/index.js",
   "private": false,
@@ -91,7 +91,7 @@
     "p-queue": "^5.0.0",
     "redis": "^2.8.0",
     "sanitize-filename": "^1.6.1",
-    "swagger-jsdoc-express": "^1.5.0",
+    "swagger-jsdoc-express": "^2.0.0",
     "tmp": "0.0.33",
     "uuid": "^3.3.2",
     "ws": "^6.2.1",
