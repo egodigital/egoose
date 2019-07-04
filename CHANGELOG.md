@@ -1,6 +1,6 @@
 # Change Log (@egodigital/egoose)
 
-## 6.5.0
+## 6.5.1
 
 * updated to `express@^4.17.1`
 * updated to `node-geocoder@^3.23.0`

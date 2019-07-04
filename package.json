@@ -1,6 +1,6 @@
 {
   "name": "@egodigital/egoose",
-  "version": "6.5.0",
+  "version": "6.5.1",
   "description": "Helper classes and functions for Node.js 8 or later.",
   "main": "lib/index.js",
   "private": false,
@@ -99,6 +99,7 @@
     "yazl": "^2.5.1"
   },
   "devDependencies": {
+    "@egodigital/tsconfig": "^1.2.0",
     "gh-pages": "^2.0.1",
     "tslint": "^5.18.0",
     "typedoc": "^0.14.2",
