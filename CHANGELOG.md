@@ -1,5 +1,12 @@
 # Change Log (@egodigital/egoose)
 
+## 6.5.0
+
+* updated to `express@^4.17.1`
+* updated to `node-geocoder@^3.23.0`
+* updated to `swagger-jsdoc-express@2.1.0`
+* updated to `yargs-parser@^13.1.1`
+
 ## 6.4.0
 
 * updated to `swagger-jsdoc-express@2.0.0`
