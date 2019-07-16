@@ -17,7 +17,7 @@
 
 import * as _ from 'lodash';
 import { normalizeString, toStringSafe } from '../index';
-const ews = require('node-ews');
+const ews = require('@egodigital/node-ews');
 
 /**
  * List of mail formats.

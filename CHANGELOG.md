@@ -1,9 +1,12 @@
 # Change Log (@egodigital/egoose)
 
+## 6.7.0
+
+* now using forked `@egodigital/node-ews@^4.0.1`
+
 ## 6.6.2
 
 * updated to `lodash@^4.17.13`
-
 
 ## 6.6.1
 
