@@ -1,6 +1,6 @@
 # Change Log (@egodigital/egoose)
 
-## 6.9.0
+## 6.9.1
 
 * updated to `node-enumerable^5.0.1`
 

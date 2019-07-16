@@ -21,7 +21,7 @@ import * as pQueue from 'p-queue';
 /**
  * Options for 'CreateQueueOptions' function.
  */
-export type CreateQueueOptions = pQueue.Options<pQueue.QueueAddOptions>;
+export type CreateQueueOptions = pQueue.Options<pQueue.DefaultAddOptions>;
 
 /**
  * Creates a new queue.

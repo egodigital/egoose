@@ -1,6 +1,6 @@
 {
   "name": "@egodigital/egoose",
-  "version": "6.9.0",
+  "version": "6.9.1",
   "description": "Helper classes and functions for Node.js 8 or later.",
   "main": "lib/index.js",
   "private": false,
@@ -103,6 +103,6 @@
     "gh-pages": "^2.0.1",
     "tslint": "^5.18.0",
     "typedoc": "^0.14.2",
-    "typescript": "^3.5.3"
+    "typescript": "3.4.5"
   }
 }
