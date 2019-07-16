@@ -1,5 +1,10 @@
 # Change Log (@egodigital/egoose)
 
+## 6.6.2
+
+* updated to `lodash@^4.17.13`
+
+
 ## 6.6.1
 
 * updated to `express@^4.17.1`
