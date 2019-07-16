@@ -1,6 +1,6 @@
 {
   "name": "@egodigital/egoose",
-  "version": "6.7.0",
+  "version": "6.7.1",
   "description": "Helper classes and functions for Node.js 8 or later.",
   "main": "lib/index.js",
   "private": false,
@@ -43,7 +43,7 @@
   },
   "homepage": "https://github.com/egodigital/egoose#readme",
   "dependencies": {
-    "@egodigital/node-ews": "^4.0.1",
+    "@egodigital/node-ews": "^4.0.2",
     "@mapbox/polyline": "^1.1.0",
     "@types/body-parser": "^1.17.0",
     "@types/chai": "^4.1.7",

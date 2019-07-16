@@ -1,8 +1,8 @@
 # Change Log (@egodigital/egoose)
 
-## 6.7.0
+## 6.7.1
 
-* now using forked `@egodigital/node-ews@^4.0.1`
+* now using forked `@egodigital/node-ews@^4.0.2`
 
 ## 6.6.2
 
