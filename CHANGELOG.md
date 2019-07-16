@@ -1,5 +1,9 @@
 # Change Log (@egodigital/egoose)
 
+## 6.9.0
+
+* updated to `node-enumerable^5.0.1`
+
 ## 6.8.0
 
 * now using forked `swagger-jsdoc-express@^2.4.0`
