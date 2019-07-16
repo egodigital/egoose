@@ -1,5 +1,9 @@
 # Change Log (@egodigital/egoose)
 
+## 6.8.0
+
+* now using forked `swagger-jsdoc-express@^2.4.0`
+
 ## 6.7.1
 
 * now using forked `@egodigital/node-ews@^4.0.2`
