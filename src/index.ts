@@ -19,6 +19,7 @@ import { exec as execChildProcess, execSync } from 'child_process';
 import * as _ from 'lodash';
 import * as crypto from 'crypto';
 import * as Enumerable from 'node-enumerable';
+import * as fsExtra from 'fs-extra';
 import * as path from 'path';
 import * as moment from 'moment-timezone';
 import * as util from 'util';
@@ -31,6 +32,10 @@ import * as yargs from 'yargs-parser';
  */
 export interface AppVersion {
     /**
+     * The version number / code.
+     */
+    code?: number | false;
+    /**
      * The last commit date. Contains (false), if failed.
      */
     date?: moment.Moment | false;
@@ -38,6 +43,10 @@ export interface AppVersion {
      * The last commit hash. Contains (false), if failed.
      */
     hash?: string | false;
+    /**
+     * The (display) name, like "1.5979.0-RC1"
+     */
+    name?: string | false;
 }
 
 /**
@@ -114,7 +123,7 @@ export type Predicate<TValue = any> = (value: TValue) => boolean;
 export function applyFuncFor<TFunc extends Function = Function>(
     func: TFunc, thisArg: any
 ): TFunc {
-    return <any>function() {
+    return <any>function () {
         return func.apply(thisArg, arguments);
     };
 }
@@ -244,7 +253,7 @@ export function cloneObj<T>(obj: T): T {
  */
 export function compareValues<T = any>(x: T, y: T): number {
     return compareValuesBy(x, y,
-                           i => i);
+        i => i);
 }
 
 /**
@@ -282,7 +291,7 @@ export function compareValuesBy<T = any, U = T>(x: T, y: T, selector: (val: T) =
  * @return {CompletedAction<TResult>} The created action.
  */
 export function createCompletedAction<TResult = any>(resolve: (value?: TResult | PromiseLike<TResult>) => void,
-                                                     reject?: (reason: any) => void): CompletedAction<TResult> {
+    reject?: (reason: any) => void): CompletedAction<TResult> {
     let completedInvoked = false;
 
     return (err, result?) => {
@@ -377,19 +386,21 @@ export function getAppVersionSync(opts?: GetAppVersionOptions): AppVersion {
 
     const VERSION: AppVersion = {};
 
+    // VERSION.date
     try {
         VERSION.date = asUTC(
             moment(
                 execSync('git log -n1 --pretty=%cI HEAD', {
                     cwd: cwd,
                 }).toString('utf8')
-                  .trim()
+                    .trim()
             )
         );
     } catch {
         VERSION.date = false;
     }
 
+    // VERSION.hash
     try {
         VERSION.hash = normalizeString(
             execSync('git log --pretty="%H" -n1 HEAD', {
@@ -398,6 +409,63 @@ export function getAppVersionSync(opts?: GetAppVersionOptions): AppVersion {
         );
     } catch {
         VERSION.hash = false;
+    }
+
+    // VERSION.code
+    try {
+        let buildNr: number | false = false;
+
+        // first check for 'BUILD_NR' file
+        const BUILD_NR_FILE = path.resolve(
+            path.join(cwd, 'BUILD_NR')
+        );
+        if (fsExtra.existsSync(BUILD_NR_FILE)) {  // does exist?
+            if (fsExtra.statSync(BUILD_NR_FILE).isFile()) {  // check if file
+                buildNr = parseInt(
+                    fsExtra.readFileSync(BUILD_NR_FILE, 'utf8')
+                        .trim()
+                );
+            }
+        }
+
+        if (false === buildNr) {
+            // now try from 'BUILD_NR' env var
+
+            const BUILD_NR = toStringSafe(process.env.BUILD_NR)
+                .trim();
+            if ('' !== BUILD_NR) {
+                buildNr = parseInt(BUILD_NR);
+            }
+        }
+
+        if (false !== buildNr) {
+            VERSION.code = isNaN(buildNr) ?
+                false : buildNr;
+        }
+    } catch (e) {
+        VERSION.code = false;
+    }
+
+    // VERSION.name
+    try {
+        const PACKAGE_JSON_FILE = path.resolve(
+            path.join(cwd, 'package.json')
+        );
+        if (fsExtra.existsSync(PACKAGE_JSON_FILE)) {  // does exist?
+            if (fsExtra.statSync(PACKAGE_JSON_FILE).isFile()) {  // check if file
+                const PACKAGE_JSON = JSON.parse(
+                    fsExtra.readFileSync(PACKAGE_JSON_FILE, 'utf8')
+                        .trim()
+                );
+
+                if (PACKAGE_JSON && !isEmptyString(PACKAGE_JSON.version)) {
+                    VERSION.name = toStringSafe(PACKAGE_JSON.version)
+                        .trim();
+                }
+            }
+        }
+    } catch (e) {
+        VERSION.name = false;
     }
 
     return VERSION;
@@ -446,7 +514,7 @@ export function now(timezone?: string): moment.Moment {
 
     const NOW = moment();
     return '' === timezone ? NOW
-                           : NOW.tz(timezone);
+        : NOW.tz(timezone);
 }
 
 /**
@@ -468,7 +536,7 @@ export function parseCommandLine(cmd: any): ParsedCommandLine {
             if (a.startsWith('"') && a.endsWith('"')) {
                 a = a.substr(1, a.length - 2);
                 a = a.split('\\"')
-                     .join('"');
+                    .join('"');
             }
         }
 
@@ -605,19 +673,19 @@ export function uuid(version?: string, ...args: any[]): string {
         case '4':
         case 'v4':
             return UUID.v4
-                       .apply(null, args);
+                .apply(null, args);
 
         case '1':
         case 'v1':
             return UUID.v1
-                       .apply(null, args);
+                .apply(null, args);
 
         case '5':
         case 'v5':
             return UUID_v5.apply(null, args);
     }
 
-    throw new Error(`Version '${ version }' is not supported`);
+    throw new Error(`Version '${version}' is not supported`);
 }
 
 export * from './apis/host';

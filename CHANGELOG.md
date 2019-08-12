@@ -1,5 +1,13 @@
 # Change Log (@egodigital/egoose)
 
+## 6.10.0
+
+* added `code` and `name` properties to [AppVersion interface](https://egodigital.github.io/egoose/interfaces/_index_.appversion.html)
+* updated to `lodash^4.17.15`
+* updated to `sanitize-filename^1.6.2`
+* removed no needed npm modules
+* code cleanups and improvements
+
 ## 6.9.1
 
 * updated to `node-enumerable^5.0.1`
