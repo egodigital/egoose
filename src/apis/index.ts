@@ -139,6 +139,10 @@ export interface MonitoringApiResult {
  */
 export interface MonitoringApiAppVersion {
     /**
+     * The version code.
+     */
+    code?: number | false;
+    /**
      * The last commit date. Contains (false), if failed.
      */
     date?: string | false;
@@ -146,6 +150,10 @@ export interface MonitoringApiAppVersion {
      * The last commit hash. Contains (false), if failed.
      */
     hash?: string | false;
+    /**
+     * The version name.
+     */
+    name?: string | false;
 }
 
 /**
@@ -285,9 +293,11 @@ export async function createMonitoringApiResult(
         });
 
         version = {
+            code: APP_VERSION.code,
             date: !APP_VERSION.date ? <any>APP_VERSION.date
                 : (<moment.Moment>APP_VERSION.date).toISOString(),
             hash: APP_VERSION.hash,
+            name: APP_VERSION.name,
         };
     }
 

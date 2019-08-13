@@ -1,6 +1,6 @@
 # Change Log (@egodigital/egoose)
 
-## 6.10.0
+## 6.10.1
 
 * added `code` and `name` properties to [AppVersion interface](https://egodigital.github.io/egoose/interfaces/_index_.appversion.html)
 * updated to `lodash^4.17.15`
