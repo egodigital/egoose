@@ -1,5 +1,9 @@
 # Change Log (@egodigital/egoose)
 
+## 6.11.0
+
+* added `listBlobs()` to [AzureStorageClient](https://egodigital.github.io/egoose/classes/_azure_storage_.azurestorageclient.html)
+
 ## 6.10.1
 
 * added `code` and `name` properties to [AppVersion interface](https://egodigital.github.io/egoose/interfaces/_index_.appversion.html)

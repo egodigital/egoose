@@ -18,11 +18,12 @@
 import * as _ from 'lodash';
 import * as azureStorage from 'azure-storage';
 import * as crypto from 'crypto';
+import * as Enumerable from 'node-enumerable';
 import * as isStream from 'is-stream';
 import * as mimeTypes from 'mime-types';
 import * as sanitizeFilename from 'sanitize-filename';
 import { readAll } from '../streams';
-import { normalizeString, toStringSafe, uuid, toBooleanSafe } from '../index';
+import { asArray, normalizeString, toStringSafe, uuid, toBooleanSafe } from '../index';
 import { createWriteStream, readFileSync } from 'fs-extra';
 import { dirname, extname, join as joinPaths, sep as pathSep } from 'path';
 import { tempFile } from '../fs';
@@ -74,6 +75,8 @@ export interface AzureStorageClientOptions {
      */
     uniqueBlobNameCreator?: (path: string) => string | Promise<string>;
 }
+
+const NO_CONTINUE_TOKEN_YET = Symbol('NO_CONTINUE_TOKEN_YET');
 
 /**
  * An async Azure Storage client.
@@ -177,6 +180,90 @@ export class AzureStorageClient {
         return Promise.resolve(
             containerProvider()
         );
+    }
+
+    /**
+     * Lists a folder in a blob storage container.
+     *
+     * @param {string} path The path of the folder.
+     * 
+     * @return {Promise<azureStorage.BlobService.BlobResult[]>} The promise with the result.
+     */
+    public listBlobs(path: string) {
+        path = toFullBlobPath(path) + '/';
+
+        return new Promise<azureStorage.BlobService.BlobResult[]>(async (resolve, reject) => {
+            try {
+                const BLOB_RESULTS: azureStorage.BlobService.BlobResult[] = [];
+                const COMPLETED = (err: any) => {
+                    if (err) {
+                        reject(err);
+                    } else {
+                        resolve(Enumerable.from(BLOB_RESULTS).where(br => {
+                            const KEY = normalizeString(br.name);
+
+                            return '' !== KEY &&
+                                '/' !== KEY;
+                        }).orderBy(br => {
+                            return normalizeString(br.name);
+                        }).toArray());
+                    }
+                };
+
+                const BLOBS = await this.createBlobService();
+
+                const CONTAINER = toStringSafe(
+                    await this.getContainer()
+                );
+
+                let currentContinuationToken: azureStorage.common.ContinuationToken | symbol = NO_CONTINUE_TOKEN_YET;
+                const HANDLE_RESULT = (result: azureStorage.BlobService.ListBlobsResult) => {
+                    currentContinuationToken = undefined;
+                    if (!result) {
+                        return;
+                    }
+
+                    currentContinuationToken = result.continuationToken;
+                    asArray(result.entries).forEach(e => {
+                        BLOB_RESULTS.push(e);
+                    });
+                };
+
+                const NEXT_SEGMENT = () => {
+                    try {
+                        if (NO_CONTINUE_TOKEN_YET !== currentContinuationToken) {
+                            if (!currentContinuationToken) {
+                                COMPLETED(null);
+                                return;
+                            }
+                        } else {
+                            currentContinuationToken = undefined;
+                        }
+
+                        BLOBS.listBlobsSegmentedWithPrefix(
+                            CONTAINER,
+                            path,
+                            currentContinuationToken as azureStorage.common.ContinuationToken,
+                            {},
+                            (err, result) => {
+                                if (err) {
+                                    COMPLETED(err);
+                                } else {
+                                    HANDLE_RESULT(result);
+                                    NEXT_SEGMENT();
+                                }
+                            }
+                        );
+                    } catch (e) {
+                        COMPLETED(e);
+                    }
+                };
+
+                NEXT_SEGMENT();
+            } catch (e) {
+                reject(e);
+            }
+        });
     }
 
     /**
@@ -295,7 +382,7 @@ export class AzureStorageClient {
                     {
                         contentSettings: {
                             contentMD5: crypto.createHash('md5')
-                                              .update(data).digest('base64'),
+                                .update(data).digest('base64'),
                             contentType: CONTENT_TYPE,
                         },
                     },
@@ -329,9 +416,9 @@ export class AzureStorageClient {
             blobNameCreator = (orgName) => {
                 const BLOB_DIR = dirname(orgName);
                 const BLOB_EXT = extname(orgName);
-                const BLOB_NAME = `${ uuid().split('-').join('') }_${ Math.round(
+                const BLOB_NAME = `${uuid().split('-').join('')}_${Math.round(
                     Math.random() * 597923979
-                ) }_tmmk`;
+                )}_tmmk`;
 
                 return joinPaths(
                     BLOB_DIR,
