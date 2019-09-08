@@ -21,12 +21,13 @@ import * as crypto from 'crypto';
 import * as Enumerable from 'node-enumerable';
 import * as isStream from 'is-stream';
 import * as mimeTypes from 'mime-types';
-import * as sanitizeFilename from 'sanitize-filename';
+const sanitizeFilename = require('sanitize-filename');
 import { readAll } from '../streams';
 import { asArray, normalizeString, toStringSafe, uuid, toBooleanSafe } from '../index';
 import { createWriteStream, readFileSync } from 'fs-extra';
 import { dirname, extname, join as joinPaths, sep as pathSep } from 'path';
 import { tempFile } from '../fs';
+import { Readable } from 'stream';
 
 /**
  * Options for an 'AzureStorageClient'.
@@ -108,6 +109,43 @@ export class AzureStorageClient {
         return Promise.resolve(
             provider()
         );
+    }
+
+    /**
+     * Creates a read stream for a blob.
+     *
+     * @param {string} path The path of the blob.
+     * 
+     * @return {Promise<Readable>} The promise with the stream. 
+     */
+    public createBlobReadStream(path: string) {
+        return new Promise<Readable>(async (resolve, reject) => {
+            try {
+                const CONTAINER = toStringSafe(
+                    await this.getContainer()
+                );
+
+                const BLOB_NAME = toStringSafe(
+                    await this.toFullPath(path)
+                );
+
+                const BLOBS = await this.createBlobService();
+
+                let stream: Readable;
+                stream = BLOBS.createReadStream(
+                    CONTAINER, BLOB_NAME,
+                    (err, result) => {
+                        if (err) {
+                            reject(err);
+                        } else {
+                            resolve(stream);
+                        }
+                    }
+                );
+            } catch (e) {
+                reject(e);
+            }
+        });
     }
 
     /**

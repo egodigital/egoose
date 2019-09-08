@@ -1,5 +1,12 @@
 # Change Log (@egodigital/egoose)
 
+## 6.12.0
+
+* added `createBlobReadStream()` method to [AzureStorageClient](https://egodigital.github.io/egoose/classes/_azure_storage_.azurestorageclient.html)
+* updated to `node-geocoder^3.24.0`
+* updated to `sanitize-filename^1.6.3`
+* updated to `uuid^3.3.3`
+
 ## 6.11.0
 
 * added `listBlobs()` to [AzureStorageClient](https://egodigital.github.io/egoose/classes/_azure_storage_.azurestorageclient.html)
