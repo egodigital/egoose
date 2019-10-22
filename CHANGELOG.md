@@ -1,5 +1,10 @@
 # Change Log (@egodigital/egoose)
 
+## 6.13.0
+
+* updated to `@types/mongoose@^5.5.22`
+* updated to `mongoose@^5.7.6`
+
 ## 6.12.0
 
 * added `createBlobReadStream()` method to [AzureStorageClient](https://egodigital.github.io/egoose/classes/_azure_storage_.azurestorageclient.html)
