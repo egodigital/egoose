@@ -1,5 +1,14 @@
 # Change Log (@egodigital/egoose)
 
+## 7.0.0
+
+* egoose is build for [Node.js 12](https://nodejs.org/dist/latest-v12.x/docs/api/) now
+* changed to [ES2019](https://en.wikipedia.org/wiki/ECMAScript#10th_Edition_-_ECMAScript_2019) options for [TypeScript](https://www.typescriptlang.org/) compiler
+* added `sendAppFeedback()` function
+* updated to `moment-timezone@^0.5.27`
+* updated to `mongoose@^5.7.8`
+* updated to `node-geocoder@^3.25.0`
+
 ## 6.13.0
 
 * updated to `@types/mongoose@^5.5.22`
