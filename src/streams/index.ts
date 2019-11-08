@@ -60,7 +60,7 @@ async function asBufferInner(data: any, enc: string, level: number): Promise<Buf
     }
 
     return Buffer.from(
-        toStringSafe(data), enc,
+        toStringSafe(data), enc as BufferEncoding,
     );
 }
 
@@ -116,10 +116,10 @@ export function readAll(stream: Stream.Readable, enc?: string): Promise<Buffer> 
                 }
 
                 if (_.isString(chunk)) {
-                    chunk = Buffer.from(chunk, enc);
+                    chunk = Buffer.from(chunk, enc as BufferEncoding);
                 }
 
-                buff = Buffer.concat([ buff, chunk ]);
+                buff = Buffer.concat([buff, chunk]);
             } catch (e) {
                 COMPLETED(e);
             }

@@ -16,25 +16,26 @@
  */
 
 const mergeDeep = require('merge-deep');
-import * as pQueue from 'p-queue';
+import PQueue, * as pQueue from 'p-queue';
+import PriorityQueue from 'p-queue/dist/priority-queue';
 
 /**
  * Options for 'CreateQueueOptions' function.
  */
-export type CreateQueueOptions = pQueue.Options<pQueue.DefaultAddOptions>;
+export type CreateQueueOptions = pQueue.Options<PriorityQueue, pQueue.DefaultAddOptions>;
 
 /**
  * Creates a new queue.
  *
  * @param {CreateQueueOptions} [opts] Custom options.
  *
- * @return {pQueue} The new queue.
+ * @return {PQueue} The new queue.
  */
-export function createQueue(opts?: CreateQueueOptions): pQueue {
+export function createQueue(opts?: CreateQueueOptions): PQueue {
     opts = mergeDeep(<CreateQueueOptions>{
         autoStart: true,
         concurrency: 1,
     }, opts || {});
 
-    return new pQueue(opts);
+    return new pQueue.default(opts);
 }

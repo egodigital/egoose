@@ -8,6 +8,7 @@
 * updated to `moment-timezone@^0.5.27`
 * updated to `mongoose@^5.7.8`
 * updated to `node-geocoder@^3.25.0`
+* updated to `p-queue@^6.2.0`
 
 ## 6.13.0
 

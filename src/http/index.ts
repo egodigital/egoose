@@ -149,7 +149,7 @@ export interface HttpResponse {
  */
 export function CONNECT(u: HttpRequestUrl, opts?: HttpRequestOptionsWithBody): Promise<HttpResponse> {
     return request('CONNECT',
-                   u, opts);
+        u, opts);
 }
 
 /**
@@ -162,7 +162,7 @@ export function CONNECT(u: HttpRequestUrl, opts?: HttpRequestOptionsWithBody): P
  */
 export function DELETE(u: HttpRequestUrl, opts?: HttpRequestOptionsWithBody): Promise<HttpResponse> {
     return request('DELETE',
-                   u, opts);
+        u, opts);
 }
 
 /**
@@ -175,7 +175,7 @@ export function DELETE(u: HttpRequestUrl, opts?: HttpRequestOptionsWithBody): Pr
  */
 export function GET(u: HttpRequestUrl, opts?: HttpRequestOptions): Promise<HttpResponse> {
     return request('GET',
-                   u, opts);
+        u, opts);
 }
 
 /**
@@ -188,7 +188,7 @@ export function GET(u: HttpRequestUrl, opts?: HttpRequestOptions): Promise<HttpR
  */
 export function HEAD(u: HttpRequestUrl, opts?: HttpRequestOptionsWithBody): Promise<HttpResponse> {
     return request('HEAD',
-                   u, opts);
+        u, opts);
 }
 
 /**
@@ -201,7 +201,7 @@ export function HEAD(u: HttpRequestUrl, opts?: HttpRequestOptionsWithBody): Prom
  */
 export function OPTIONS(u: HttpRequestUrl, opts?: HttpRequestOptionsWithBody): Promise<HttpResponse> {
     return request('OPTIONS',
-                   u, opts);
+        u, opts);
 }
 
 /**
@@ -214,7 +214,7 @@ export function OPTIONS(u: HttpRequestUrl, opts?: HttpRequestOptionsWithBody): P
  */
 export function PATCH(u: HttpRequestUrl, opts?: HttpRequestOptionsWithBody): Promise<HttpResponse> {
     return request('PATCH',
-                   u, opts);
+        u, opts);
 }
 
 /**
@@ -227,7 +227,7 @@ export function PATCH(u: HttpRequestUrl, opts?: HttpRequestOptionsWithBody): Pro
  */
 export function POST(u: HttpRequestUrl, opts?: HttpRequestOptionsWithBody): Promise<HttpResponse> {
     return request('POST',
-                   u, opts);
+        u, opts);
 }
 
 /**
@@ -240,7 +240,7 @@ export function POST(u: HttpRequestUrl, opts?: HttpRequestOptionsWithBody): Prom
  */
 export function PUT(u: HttpRequestUrl, opts?: HttpRequestOptionsWithBody): Promise<HttpResponse> {
     return request('PUT',
-                   u, opts);
+        u, opts);
 }
 
 /**
@@ -259,7 +259,7 @@ export function request(method: string, u: HttpRequestUrl, opts?: HttpRequestOpt
     }
 
     if (!_.isObject(u)) {
-        u = url.parse( toStringSafe(u) );
+        u = url.parse(toStringSafe(u));
     }
 
     if (_.isNil(opts)) {
@@ -296,19 +296,19 @@ export function request(method: string, u: HttpRequestUrl, opts?: HttpRequestOpt
                     pipe: function (target) {
                         return response.pipe(target);
                     },
-                    readBody: async function() {
+                    readBody: async function () {
                         if (false === respBody) {
                             respBody = await readAll(response);
                         }
 
                         return respBody;
                     },
-                    readJSON: async function(enc?) {
+                    readJSON: async function (enc?) {
                         return JSON.parse(
                             await this.readString(enc)
                         );
                     },
-                    readString: async function(enc?) {
+                    readString: async function (enc?) {
                         enc = normalizeString(enc);
                         if ('' === enc) {
                             enc = 'utf8';
@@ -334,10 +334,10 @@ export function request(method: string, u: HttpRequestUrl, opts?: HttpRequestOpt
                 for (const H in opts.headers) {
                     const HEADER_NAME =
                         toBooleanSafe(opts.doNotNormalizeHeaders) ?
-                        toStringSafe(H).trim() :
-                        NormalizeHeaderCase(
-                            toStringSafe(H).trim()
-                        );
+                            toStringSafe(H).trim() :
+                            NormalizeHeaderCase(
+                                toStringSafe(H).trim()
+                            );
 
                     REQUEST_OPTS.headers[HEADER_NAME] =
                         toStringSafe(opts.headers[H]);
@@ -390,7 +390,7 @@ export function request(method: string, u: HttpRequestUrl, opts?: HttpRequestOpt
             }
 
             if (false === requestFactory) {
-                throw new Error(`HTTP protocol '${ PROTOCOL }' not supported`);
+                throw new Error(`HTTP protocol '${PROTOCOL}' not supported`);
             }
 
             request = requestFactory();
@@ -408,7 +408,7 @@ export function request(method: string, u: HttpRequestUrl, opts?: HttpRequestOpt
                 } else if (Buffer.isBuffer(body)) {
                     request.write(body);
                 } else {
-                    request.write(Buffer.from(toStringSafe(body), enc));
+                    request.write(Buffer.from(toStringSafe(body), enc as BufferEncoding));
                 }
             }
 
@@ -429,5 +429,5 @@ export function request(method: string, u: HttpRequestUrl, opts?: HttpRequestOpt
  */
 export function TRACE(u: HttpRequestUrl, opts?: HttpRequestOptionsWithBody): Promise<HttpResponse> {
     return request('TRACE',
-                   u, opts);
+        u, opts);
 }
