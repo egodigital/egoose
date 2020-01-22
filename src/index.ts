@@ -717,5 +717,4 @@ export * from './strings';
 export * from './system';
 export * from './zip/builder';
 
-export { asEnumerable, from, isEnumerable, isSequence, popFrom, random, range, repeat, shiftFrom } from 'node-enumerable';
 export { setupSwaggerUIFromSourceFiles } from 'swagger-jsdoc-express';

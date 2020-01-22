@@ -87,7 +87,6 @@ export class ZipBuilder {
             const FILES = await glob('**/**', {
                 absolute: true,
                 cwd: dir,
-                deep: true,
                 dot: true,
                 onlyFiles: true,
                 unique: true,

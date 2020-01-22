@@ -22,8 +22,6 @@ import { Stats as FSStats } from 'fs';
 import * as MergeDeep from 'merge-deep';
 import * as tmp from 'tmp';
 import { asArray, toBooleanSafe, toStringSafe } from '../index';
-import { IOptions } from 'fast-glob/out/managers/options';
-import { EntryItem } from 'fast-glob/out/types/entries';
 
 /**
  * A value, that can be used as file system path.
@@ -105,15 +103,15 @@ export function exists(path: fs.PathLike): Promise<boolean> {
  * Scans for files.
  *
  * @param {string|string[]} patterns One or more glob patterns.
- * @param {Partial<IOptions<EntryItem>>} [opts] Custom options.
+ * @param {FastGlob.Options} [opts] Custom options.
  *
- * @return {Promise<EntryItem[]>} The promise with the found items.
+ * @return {Promise<string[]>} The promise with the found items.
  */
-export async function glob(
+export function glob(
     patterns: string | string[],
-    opts?: Partial<IOptions<EntryItem>>,
-): Promise<EntryItem[]> {
-    return await fastGlob(
+    opts?: fastGlob.Options,
+): Promise<string[]> {
+    return fastGlob(
         normalizeGlobPatterns(patterns),
         mergeGlobOptions(opts),
     );
@@ -123,14 +121,14 @@ export async function glob(
  * Scans for files (synchronious).
  *
  * @param {string|string[]} patterns One or more glob patterns.
- * @param {Partial<IOptions<EntryItem>>} [opts] Custom options.
+ * @param {FastGlob.Options} [opts] Custom options.
  *
- * @return {EntryItem[]} The found items.
+ * @return {string[]} The found items.
  */
 export function globSync(
     patterns: string | string[],
-    opts?: Partial<IOptions<EntryItem>>,
-): EntryItem[] {
+    opts?: fastGlob.Options,
+): string[] {
     return fastGlob.sync(
         normalizeGlobPatterns(patterns),
         mergeGlobOptions(opts),
@@ -345,12 +343,11 @@ export function isSymLinkSync(path: FileSystemPath): boolean {
     );
 }
 
-function mergeGlobOptions(opts: Partial<IOptions<EntryItem>>): Partial<IOptions<EntryItem>> {
-    const DEFAULT_OPTS: Partial<IOptions<EntryItem>> = {
+function mergeGlobOptions(opts: fastGlob.Options): fastGlob.Options {
+    const DEFAULT_OPTS: fastGlob.Options = {
         absolute: true,
-        deep: true,
         dot: true,
-        followSymlinkedDirectories: true,
+        followSymbolicLinks: true,
         markDirectories: false,
         onlyDirectories: false,
         onlyFiles: true,
@@ -384,7 +381,7 @@ export function tempFile<TResult = any>(
 
     return new Promise<TResult>((resolve, reject) => {
         try {
-            tmp.tmpName(toSimpleOptions(opts), (err, tmpFile) => {
+            tmp.tmpName(toSimpleTempOptions(opts), (err, tmpFile) => {
                 if (err) {
                     reject(err);
                 } else {
@@ -433,7 +430,7 @@ export function tempFileSync<TResult = any>(
         opts = <any>{};
     }
 
-    const TEMP_FILE = tmp.tmpNameSync(toSimpleOptions(opts));
+    const TEMP_FILE = tmp.tmpNameSync(toSimpleTempOptions(opts));
     try {
         return action(TEMP_FILE);
     } finally {
@@ -445,11 +442,11 @@ export function tempFileSync<TResult = any>(
     }
 }
 
-function toSimpleOptions(opts: TempFileOptions): tmp.SimpleOptions {
+function toSimpleTempOptions(opts: TempFileOptions): TempFileOptions {
     return {
         dir: _.isNil(opts.dir) ? undefined : toStringSafe(opts.dir),
         keep: true,
-        postfix: toStringSafe(opts.suffix),
         prefix: toStringSafe(opts.prefix),
+        suffix: toStringSafe(opts.suffix),
     };
 }

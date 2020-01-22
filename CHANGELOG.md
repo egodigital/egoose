@@ -1,5 +1,22 @@
 # Change Log (@egodigital/egoose)
 
+## 8.0.0
+
+* [node-enumerables](https://github.com/mkloubert/node-enumerable) has been removed from library
+* updated to `fast-glob@^3.1.1`
+* updated to `fs-extra@^8.1.0`
+* updated to `is-stream@^2.0.0`
+* updated to `mime-types@^2.1.26`
+* updated to `moment@^2.24.0`
+* updated to `moment-timezone@^0.5.27`
+* updated to `mongoose@^5.8.9`
+* updated to `p-queue@^6.2.1`
+* updated to `swagger-jsdoc-express@^3.0.0`
+* updated to `tmp@^0.1.0`
+* updated to `uuid@^3.4.0`
+* updated to `ws@^7.2.1`
+* updated to `yargs-parser@^16.1.0`
+
 ## 7.0.0
 
 * egoose is build for [Node.js 12](https://nodejs.org/dist/latest-v12.x/docs/api/) now
