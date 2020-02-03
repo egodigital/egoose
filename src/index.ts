@@ -190,15 +190,16 @@ export function asMoment(val: any): moment.Moment {
     } else if (moment.isDate(val)) {
         result = moment(val);
     } else {
-        let unix = parseInt(
-            toStringSafe(val).trim()
-        );
-        if (isNaN(unix)) {
+        const TIME_STR = toStringSafe(val).trim();
+
+        if (/^([0-9]{1,})$/i.test(TIME_STR)) {
+            // UNIX timestamp
+            
             result = moment(
-                toStringSafe(val)
+                parseInt(TIME_STR)
             );
         } else {
-            result = moment(unix);
+            result = moment(TIME_STR);
         }
     }
 

@@ -1,6 +1,11 @@
 # Change Log (@egodigital/egoose)
 
-## 8.0.0
+## 8.1.0
+
+* fixed [asMoment()](https://egodigital.github.io/egoose/modules/_index_.html#asmoment) function
+* updated to `mongoose@^5.8.11`
+
+## 8.0.1
 
 * [node-enumerables](https://github.com/mkloubert/node-enumerable) has been removed from library
 * updated to `fast-glob@^3.1.1`
