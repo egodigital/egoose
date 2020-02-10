@@ -1,5 +1,9 @@
 # Change Log (@egodigital/egoose)
 
+## 8.2.0
+
+* updated to `@egodigital/node-ews@^4.1.1`
+
 ## 8.1.0
 
 * fixed [asMoment()](https://egodigital.github.io/egoose/modules/_index_.html#asmoment) function
