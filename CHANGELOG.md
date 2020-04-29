@@ -1,5 +1,17 @@
 # Change Log (@egodigital/egoose)
 
+## 8.3.0
+
+* library requires at least Node 10 and NPM 6 now
+* update to `fast-glob^3.2.2`
+* update to `mime-types^2.1.27`
+* update to `mocha^7.1.2`
+* update to `moment-timezone^0.5.28`
+* update to `mongoose^5.9.10`
+* update to `node-geocoder^3.27.0`
+* update to `p-queue^6.3.0`
+* update to `ws^7.2.5`
+
 ## 8.2.0
 
 * updated to `@egodigital/node-ews@^4.1.1`
