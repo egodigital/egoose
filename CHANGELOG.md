@@ -1,6 +1,6 @@
 # Change Log (@egodigital/egoose)
 
-## 8.3.2
+## 8.3.1
 
 * library requires at least Node 10 and NPM 6 now
 * update to `fast-glob^3.2.2`
