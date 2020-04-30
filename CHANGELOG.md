@@ -1,8 +1,8 @@
 # Change Log (@egodigital/egoose)
 
-## 8.3.1
+## 8.3.2
 
-* library requires at least Node 10 and NPM 6 now
+* library requires at least Node 12+ and NPM 6.9+ now
 * update to `fast-glob^3.2.2`
 * update to `mime-types^2.1.27`
 * update to `mocha^7.1.2`
