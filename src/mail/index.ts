@@ -70,7 +70,7 @@ export async function sendMail(
     const EWS_CONFIG = {
         username: process.env.EWS_USERNAME,
         password: process.env.EWS_PASSWORD,
-        host: 'https://outlook.office.de',
+        host: process.env.EWS_HOST || 'https://outlook.office.de',
         auth: 'basic'
     };
 
