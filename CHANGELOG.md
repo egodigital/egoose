@@ -1,5 +1,13 @@
 # Change Log (@egodigital/egoose)
 
+## 8.4.0
+
+* add `EWS_HOST` environment variable for [sendMail()](https://egodigital.github.io/egoose/modules/_mail_index_.html#sendmail) function
+* update to `moment^2.25.3`
+* update to `mongoose^5.9.13`
+* update to `p-queue^6.4.0`
+* update to `ws^7.3.0`
+
 ## 8.3.2
 
 * library requires at least Node 12+ and NPM 6.9+ now
