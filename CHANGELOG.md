@@ -1,5 +1,9 @@
 # Change Log (@egodigital/egoose)
 
+## 8.5.0
+
+* npm update
+
 ## 8.4.0
 
 * add `EWS_HOST` environment variable for [sendMail()](https://egodigital.github.io/egoose/modules/_mail_index_.html#sendmail) function
