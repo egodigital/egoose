@@ -1,5 +1,17 @@
 # Change Log (@egodigital/egoose)
 
+## 8.5.0
+
+* update to `@mapbox/polyline^1.1.1`
+* update to `fast-glob^3.2.4`
+* update to `lodash^4.17.19`
+* update to `mocha^7.2.0`
+* update to `moment^2.27.0`
+* update to `moment-timezone^0.5.31`
+* update to `mongoose^5.9.27`
+* update to `p-queue^6.6.0`
+* update to `ws^7.3.1`
+
 ## 8.4.0
 
 * add `EWS_HOST` environment variable for [sendMail()](https://egodigital.github.io/egoose/modules/_mail_index_.html#sendmail) function
